@@ -123,7 +123,7 @@ class _BirdMigrationForm extends StatelessWidget {
           MeasureActionButton(
             title: "Valider",
             onTap: () {
-              // TODO: valider le formulaire
+              //
             },
           ),
         ],

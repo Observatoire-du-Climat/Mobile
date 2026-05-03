@@ -64,7 +64,7 @@ class MeasurePage extends StatelessWidget {
                         label: "Relevé des Pontes",
                         imagePath: "assets/images/FB_picto-Amphibiens.png",
                         onPressed: (){
-                          Navigator.pushNamed(context, '/pontes');
+                          Navigator.pushNamed(context, '/eggs_laying');
                         },
                       ),
                       MeasureItem(
