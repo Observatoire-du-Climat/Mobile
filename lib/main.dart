@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/pages/measure_page.dart';
+import 'package:mobile/pages/measures/bird_migration_page.dart';
 import 'package:mobile/pages/measures/snow_height_page.dart';
 import 'package:mobile/pages/measures/temperature_page.dart';
 
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         '/measure' : (context) => const MeasurePage(),
         '/temperature' : (context) => const TemperaturePage(),
         '/snow_height' : (context) => const SnowHeightPage(),
+        '/bird_migration' : (context) => const BirdMigrationPage(),
       },
       home: Scaffold(
           body: TestPage()),

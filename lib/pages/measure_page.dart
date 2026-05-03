@@ -57,7 +57,7 @@ class MeasurePage extends StatelessWidget {
                         label: "Migrations des Oiseaux",
                         imagePath: "assets/images/FB_picto-Hirondelle.png",
                         onPressed: (){
-                          Navigator.pushNamed(context, '/oiseaux');
+                          Navigator.pushNamed(context, '/bird_migration');
                         },
                       ),
                       MeasureItem(
