@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/measure_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,6 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-          appBar: AppBar(title: const Text("Mon app")),
           body: TestPage()),
     );
   }
@@ -24,10 +24,13 @@ class TestPage extends StatelessWidget {
   const TestPage({super.key});
   @override
   Widget build(BuildContext context) {
+    /*
     return Scaffold(
       body: Center(
         child: Text("Observatoire du Climat"),
       ),
     );
+     */
+    return MeasurePage();
   }
 }
