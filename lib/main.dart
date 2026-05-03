@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/pages/measure_page.dart';
+import 'package:mobile/pages/measures/snow_height_page.dart';
 import 'package:mobile/pages/measures/temperature_page.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/measure' : (context) => const MeasurePage(),
         '/temperature' : (context) => const TemperaturePage(),
+        '/snow_height' : (context) => const SnowHeightPage(),
       },
       home: Scaffold(
           body: TestPage()),

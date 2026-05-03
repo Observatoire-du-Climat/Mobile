@@ -12,7 +12,7 @@ class NavBar extends StatelessWidget {
   });
 
   void _onTap(BuildContext context, NavItem item) {
-    if (item == current) return;
+    //if (item == current) return;
 
     switch (item) {
       case NavItem.measure:

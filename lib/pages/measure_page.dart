@@ -50,7 +50,7 @@ class MeasurePage extends StatelessWidget {
                         label: "Hauteur des Neiges",
                         imagePath: "assets/images/FB_picto-Neige.png",
                         onPressed: (){
-                          Navigator.pushNamed(context, '/neiges');
+                          Navigator.pushNamed(context, '/snow_height');
                         },
                       ),
                       MeasureItem(
