@@ -6,6 +6,7 @@ import 'package:mobile/pages/measures/bird_migration_page.dart';
 import 'package:mobile/pages/measures/eggs_laying_page.dart';
 import 'package:mobile/pages/measures/snow_height_page.dart';
 import 'package:mobile/pages/measures/temperature_page.dart';
+import 'package:mobile/pages/profile_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/bird_migration' : (context) => const BirdMigrationPage(),
         '/eggs_laying' : (context) => const EggsLayingPage(),
         '/history' : (context) => const HistoryPage(),
+        '/profile' : (context) => const ProfilePage(),
       },
       home: Scaffold(
           body: TestPage()),
