@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/pages/history_page.dart';
+import 'package:mobile/pages/home_page.dart';
+import 'package:mobile/pages/login_page.dart';
 import 'package:mobile/pages/measure_page.dart';
 import 'package:mobile/pages/measures/bird_migration_page.dart';
 import 'package:mobile/pages/measures/eggs_laying_page.dart';
 import 'package:mobile/pages/measures/snow_height_page.dart';
 import 'package:mobile/pages/measures/temperature_page.dart';
 import 'package:mobile/pages/profile_page.dart';
+import 'package:mobile/pages/register_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +30,9 @@ class MyApp extends StatelessWidget {
         '/eggs_laying' : (context) => const EggsLayingPage(),
         '/history' : (context) => const HistoryPage(),
         '/profile' : (context) => const ProfilePage(),
+        '/login' : (context) => const LoginPage(),
+        '/register' : (context) => const RegisterPage(),
+        '/home' : (context) => const HomePage()
       },
       home: Scaffold(
           body: TestPage()),
@@ -45,6 +51,6 @@ class TestPage extends StatelessWidget {
       ),
     );
      */
-    return MeasurePage();
+    return HomePage();
   }
 }

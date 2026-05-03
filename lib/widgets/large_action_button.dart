@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../app_theme.dart';
 
-class ProfileActionButton extends StatelessWidget {
+class LargeActionButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const ProfileActionButton({
+  const LargeActionButton({
     super.key,
     required this.title,
     required this.onTap,

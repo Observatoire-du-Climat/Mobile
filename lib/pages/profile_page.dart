@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/profile_action_button.dart';
+import 'package:mobile/widgets/large_action_button.dart';
 
 import '../app_theme.dart';
 import '../widgets/nav_bar.dart';
-import '../widgets/measure_action_button.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -76,17 +75,18 @@ class ProfileCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),
-          ProfileActionButton(
+          LargeActionButton(
             title: "Modifier",
             onTap: () {
               //
             },
           ),
           const SizedBox(height: 8),
-          ProfileActionButton(
+          LargeActionButton(
             title: "Déconnexion",
             onTap: () {
-              //
+              Navigator.pushReplacementNamed(
+                  context, '/home');
             },
           ),
         ],
@@ -104,13 +104,13 @@ class SettingsCard extends StatelessWidget {
       title: "Paramètres",
       child: Column(
         children: [
-          ProfileActionButton(title: "Notifications", onTap: () {}),
+          LargeActionButton(title: "Notifications", onTap: () {}),
           const SizedBox(height: 10),
-          ProfileActionButton(title: "Confidentialité", onTap: () {}),
+          LargeActionButton(title: "Confidentialité", onTap: () {}),
           const SizedBox(height: 10),
-          ProfileActionButton(title: "À propos de", onTap: () {}),
+          LargeActionButton(title: "À propos de", onTap: () {}),
           const SizedBox(height: 10),
-          ProfileActionButton(title: "Aide", onTap: () {}),
+          LargeActionButton(title: "Aide", onTap: () {}),
         ],
       ),
     );
