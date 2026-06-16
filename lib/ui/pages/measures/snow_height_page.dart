@@ -1,41 +1,40 @@
 import 'package:flutter/material.dart';
 
-import '../../app_theme.dart';
+import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 
-enum MigrationType {
-  arrival,
-  departure,
+enum WeatherCondition {
+  soleil,
+  pluie,
+  neige,
 }
 
-class BirdMigrationPage extends StatefulWidget {
-  const BirdMigrationPage({super.key});
+class SnowHeightPage extends StatefulWidget {
+  const SnowHeightPage({super.key});
 
   @override
-  State<BirdMigrationPage> createState() => _BirdMigrationPageState();
+  State<SnowHeightPage> createState() => _SnowHeightPageState();
 }
 
-class _BirdMigrationPageState extends State<BirdMigrationPage> {
-  MigrationType _migrationType = MigrationType.arrival;
+class _SnowHeightPageState extends State<SnowHeightPage> {
+  WeatherCondition _weatherCondition = WeatherCondition.soleil;
 
   static const String indicatorInfo =
-      "Les hirondelles et les martinets sont des oiseaux migrateurs parcourant chaque année plusieurs milliers de kilomètres "
-      "entre leurs lieux d’hivernage et leurs sites de reproduction.\n\n"
-      "Leur cycle migratoire dépend fortement des conditions climatiques, notamment de la température et de la disponibilité "
-      "en insectes, leur principale source de nourriture.\n\n"
-      "L’observation de leur arrivée au printemps et de leur départ en automne permet de recueillir des informations sur les "
-      "changements saisonniers et leurs effets sur la biodiversité.\n\n"
-      "Hirondelle de fenêtre : arrivée de mi-avril à fin mai / départ de mi-août à fin octobre.\n"
-      "Hirondelle rustique : arrivée de mi-mars à fin mai / départ de mi-août à fin octobre.\n"
-      "Martinet : arrivée de mi-avril à fin mai / départ de fin juin à fin septembre.";
+      "Le manteau neigeux correspond à la couche de neige qui recouvre le sol durant l’hiver. "
+      "Il joue un rôle essentiel dans les écosystèmes montagnards, en régulant la température du sol, "
+      "en protégeant certaines espèces végétales et animales, et en constituant une réserve d’eau précieuse.\n\n"
+      "La mesure du manteau neigeux, réalisée à l’aide de mâts gradués installés à des emplacements fixes, permet de :\n\n"
+      "• Suivre la durée de l’enneigement ;\n"
+      "• Identifier la période de fonte.\n\n"
+      "Le relevé de ces données complète les informations fournies par les stations météorologiques existantes.";
 
   static const String tutorial =
-      "Relevez, dans les périodes précédemment citées, l’arrivée du premier individu et le départ du dernier individu, "
-      "pour chaque espèce, depuis votre lieu d’habitation.\n\n"
-      "Il n’est pas nécessaire que ces individus soient associés à un site en particulier : il suffit simplement de noter "
-      "les premiers oiseaux observés dans le ciel et les derniers à repartir.";
+      "Se rendre une fois par jour à 8h, d’octobre à mi-mai, sur le site choisi, en cas de présence de neige.\n\n"
+      "Relevez la hauteur de neige en cm à l’aide du mât gradué.\n\n"
+      "Indiquez les conditions météo lors du relevé : soleil, pluie ou neige.\n\n"
+      "Indiquez si des précipitations neigeuses ont eu lieu le jour de votre passage.";
 
   @override
   Widget build(BuildContext context) {
@@ -51,23 +50,29 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
                 'assets/images/logo-vert.png',
                 height: 70,
               ),
+
               const SizedBox(height: 40),
-              _BirdMigrationForm(
-                migrationType: _migrationType,
-                onMigrationChanged: (value) {
+
+              _SnowHeightForm(
+                weatherCondition: _weatherCondition,
+                onWeatherChanged: (value) {
                   if (value == null) return;
 
                   setState(() {
-                    _migrationType = value;
+                    _weatherCondition = value;
                   });
                 },
               ),
+
               const SizedBox(height: 32),
+
               const InfoTextSection(
                 title: "Informations sur l'indicateur",
                 paragraph: indicatorInfo,
               ),
+
               const SizedBox(height: 32),
+
               const InfoTextSection(
                 title: "Tutoriel",
                 paragraph: tutorial,
@@ -80,13 +85,13 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
   }
 }
 
-class _BirdMigrationForm extends StatelessWidget {
-  final MigrationType migrationType;
-  final ValueChanged<MigrationType?> onMigrationChanged;
+class _SnowHeightForm extends StatelessWidget {
+  final WeatherCondition weatherCondition;
+  final ValueChanged<WeatherCondition?> onWeatherChanged;
 
-  const _BirdMigrationForm({
-    required this.migrationType,
-    required this.onMigrationChanged,
+  const _SnowHeightForm({
+    required this.weatherCondition,
+    required this.onWeatherChanged,
   });
 
   @override
@@ -101,7 +106,7 @@ class _BirdMigrationForm extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Migrations des Oiseaux",
+            "Hauteur des Neiges",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium,
           ),
@@ -111,20 +116,36 @@ class _BirdMigrationForm extends StatelessWidget {
             height: 1,
             color: AppColors.forestGreen,
           ),
+
           const SizedBox(height: 32),
-          const _BirdField(label: "Date"),
-          const _BirdField(label: "Oiseaux"),
-          _MigrationRadioGroup(
-            selected: migrationType,
-            onChanged: onMigrationChanged,
+
+          const _SnowField(label: "Date"),
+          const _SnowField(label: "Hauteur"),
+          _WeatherRadioGroup(
+            selected: weatherCondition,
+            onChanged: onWeatherChanged,
           ),
-          const _BirdField(label: "Lieu"),
+          const _SnowField(label: "Précipitations neigeuses"),
+          const _SnowField(label: "Lieu"),
+
           const SizedBox(height: 24),
-          MeasureActionButton(
-            title: "Valider",
-            onTap: () {
-              //
-            },
+
+          Column(
+            children: [
+              MeasureActionButton(
+                title: "Photo",
+                onTap: () {
+                  //
+                },
+              ),
+              const SizedBox(height: 12),
+              MeasureActionButton(
+                title: "Valider",
+                onTap: () {
+                  //
+                },
+              ),
+            ],
           ),
         ],
       ),
@@ -132,10 +153,10 @@ class _BirdMigrationForm extends StatelessWidget {
   }
 }
 
-class _BirdField extends StatelessWidget {
+class _SnowField extends StatelessWidget {
   final String label;
 
-  const _BirdField({
+  const _SnowField({
     required this.label,
   });
 
@@ -146,7 +167,7 @@ class _BirdField extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 120,
+            width: 145,
             child: Text(
               "$label :",
               style: Theme.of(context).textTheme.bodyMedium,
@@ -174,11 +195,11 @@ class _BirdField extends StatelessWidget {
   }
 }
 
-class _MigrationRadioGroup extends StatelessWidget {
-  final MigrationType selected;
-  final ValueChanged<MigrationType?> onChanged;
+class _WeatherRadioGroup extends StatelessWidget {
+  final WeatherCondition selected;
+  final ValueChanged<WeatherCondition?> onChanged;
 
-  const _MigrationRadioGroup({
+  const _WeatherRadioGroup({
     required this.selected,
     required this.onChanged,
   });
@@ -191,24 +212,30 @@ class _MigrationRadioGroup extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 120,
+            width: 145,
             child: Text(
-              "Arrivée / Départ :",
+              "Conditions météo :",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Expanded(
             child: Column(
               children: [
-                _MigrationRadioOption(
-                  label: "Arrivée",
-                  value: MigrationType.arrival,
+                _WeatherRadioOption(
+                  label: "Soleil",
+                  value: WeatherCondition.soleil,
                   selected: selected,
                   onChanged: onChanged,
                 ),
-                _MigrationRadioOption(
-                  label: "Départ",
-                  value: MigrationType.departure,
+                _WeatherRadioOption(
+                  label: "Pluie",
+                  value: WeatherCondition.pluie,
+                  selected: selected,
+                  onChanged: onChanged,
+                ),
+                _WeatherRadioOption(
+                  label: "Neige",
+                  value: WeatherCondition.neige,
                   selected: selected,
                   onChanged: onChanged,
                 ),
@@ -221,13 +248,13 @@ class _MigrationRadioGroup extends StatelessWidget {
   }
 }
 
-class _MigrationRadioOption extends StatelessWidget {
+class _WeatherRadioOption extends StatelessWidget {
   final String label;
-  final MigrationType value;
-  final MigrationType selected;
-  final ValueChanged<MigrationType?> onChanged;
+  final WeatherCondition value;
+  final WeatherCondition selected;
+  final ValueChanged<WeatherCondition?> onChanged;
 
-  const _MigrationRadioOption({
+  const _WeatherRadioOption({
     required this.label,
     required this.value,
     required this.selected,
@@ -238,7 +265,7 @@ class _MigrationRadioOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 28,
-      child: RadioListTile<MigrationType>(
+      child: RadioListTile<WeatherCondition>(
         value: value,
         groupValue: selected,
         onChanged: onChanged,

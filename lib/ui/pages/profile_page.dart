@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/large_action_button.dart';
+import 'package:mobile/ui/widgets/large_action_button.dart';
 
-import '../app_theme.dart';
+import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 
 class ProfilePage extends StatelessWidget {

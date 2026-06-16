@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 
-import '../../app_theme.dart';
+import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 
-class TemperaturePage extends StatelessWidget {
-  const TemperaturePage({super.key});
+class EggsLayingPage extends StatelessWidget {
+  const EggsLayingPage({super.key});
 
   static const String indicatorInfo =
-      "Le suivi régulier de la température permet d’observer l’évolution des conditions environnementales locales. "
-      "En réalisant chaque jour et à la même heure une mesure au même endroit, il est possible d’obtenir des données qui permettent :\n\n"
-      "• De suivre les variations saisonnières ;\n"
-      "• D’identifier d’éventuelles anomalies et leur fréquence ;\n"
-      "• D’observer l’évolution de la température sur le moyen/long terme ;\n"
-      "• D’observer l’influence de l’environnement sur la température.\n\n"
-      "Le relevé de ces données complète les informations fournies par les stations météorologiques existantes, "
-      "offrant ainsi une vision plus précise et localisée des conditions réelles sur le terrain.";
+      "Les amphibiens, tels que le crapaud commun ou la grenouille rousse, sont sensibles aux variations climatiques, "
+      "car leur migration pour la reproduction dépend des températures, de l’humidité et du cycle des saisons.\n\n"
+      "En suivant les dates de migration de ces espèces, à des altitudes différentes, il est possible de détecter les signes "
+      "du changement climatique, notamment :\n\n"
+      "• Le réchauffement des températures ;\n"
+      "• La modification du régime des précipitations.";
 
   static const String tutorial =
-      "Rendez-vous sur votre site et prenez la mesure de température.\n\n"
-      "Relevez la température à la même heure chaque jour pour éviter les biais liés aux variations naturelles au cours de la journée.\n\n"
-      "Le relevé doit être réalisé à 8h en hiver et 7h en été pour cadrer avec la température minimale journalière.\n\n"
-      "Reportez la mesure en degrés Celsius (°C).";
+      "Rendez-vous une fois par semaine à partir de mi-février, jusqu’au plan d’eau choisi.\n\n"
+      "Vous êtes libre de décider du jour de relevé, mais celui-ci doit rester identique chaque semaine. "
+      "En cas d’empêchement ponctuel, le relevé peut être exceptionnellement décalé au jour précédent ou au jour suivant.\n\n"
+      "Comptez, à chaque passage, le nombre de pontes des espèces présentes dans l’ensemble du plan d’eau et reportez les résultats.\n\n"
+      "Il est normal de compter plusieurs fois les mêmes pontes d’une semaine à l’autre, jusqu’à leur éclosion.";
 
   @override
   Widget build(BuildContext context) {
@@ -38,20 +37,14 @@ class TemperaturePage extends StatelessWidget {
                 'assets/images/logo-vert.png',
                 height: 70,
               ),
-
               const SizedBox(height: 40),
-
-              const TemperatureForm(),
-
+              const _EggLayingForm(),
               const SizedBox(height: 32),
-
               const InfoTextSection(
                 title: "Informations sur l'indicateur",
                 paragraph: indicatorInfo,
               ),
-
               const SizedBox(height: 32),
-
               const InfoTextSection(
                 title: "Tutoriel",
                 paragraph: tutorial,
@@ -64,8 +57,8 @@ class TemperaturePage extends StatelessWidget {
   }
 }
 
-class TemperatureForm extends StatelessWidget {
-  const TemperatureForm({super.key});
+class _EggLayingForm extends StatelessWidget {
+  const _EggLayingForm();
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +72,8 @@ class TemperatureForm extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Température",
+            "Relevé des Pontes",
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
@@ -88,15 +82,11 @@ class TemperatureForm extends StatelessWidget {
             height: 1,
             color: AppColors.forestGreen,
           ),
-
           const SizedBox(height: 32),
-
-          const TemperatureField(label: "Date"),
-          const TemperatureField(label: "Degré"),
-          const TemperatureField(label: "Lieu"),
-
+          const _EggField(label: "Date"),
+          const _EggField(label: "Nombre de pontes"),
+          const _EggField(label: "Lieu"),
           const SizedBox(height: 24),
-
           Column(
             children: [
               MeasureActionButton(
@@ -120,11 +110,10 @@ class TemperatureForm extends StatelessWidget {
   }
 }
 
-class TemperatureField extends StatelessWidget {
+class _EggField extends StatelessWidget {
   final String label;
 
-  const TemperatureField({
-    super.key,
+  const _EggField({
     required this.label,
   });
 
@@ -135,7 +124,7 @@ class TemperatureField extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 70,
+            width: 140,
             child: Text(
               "$label :",
               style: Theme.of(context).textTheme.bodyMedium,
@@ -145,13 +134,13 @@ class TemperatureField extends StatelessWidget {
             child: SizedBox(
               height: 34,
               child: TextField(
+                keyboardType: label == "Nombre de pontes"
+                    ? TextInputType.number
+                    : TextInputType.text,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: AppColors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4),
                     borderSide: BorderSide.none,

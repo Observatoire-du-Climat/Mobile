@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../app_theme.dart';
+import '../../app_theme.dart';
 import '../widgets/large_action_button.dart';
 
-
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +22,21 @@ class RegisterPage extends StatelessWidget {
               ),
             ),
           ),
+
           SafeArea(
-            child: SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 31),
               child: Column(
                 children: [
                   const SizedBox(height: 20),
+
                   Image.asset(
                     'assets/images/logo-vert.png',
                     height: 78,
                   ),
+
                   const SizedBox(height: 28),
+
                   Text(
                     "Observatoire du Climat",
                     textAlign: TextAlign.center,
@@ -48,7 +51,9 @@ class RegisterPage extends StatelessWidget {
                     height: 2,
                     color: AppColors.forestGreen,
                   ),
-                  const SizedBox(height: 38),
+
+                  const SizedBox(height: 40),
+
                   Container(
                     padding: const EdgeInsets.all(30),
                     decoration: BoxDecoration(
@@ -59,35 +64,41 @@ class RegisterPage extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          "Créer un compte",
+                          "Connexion",
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         const SizedBox(height: 6),
                         Container(
-                          width: 170,
                           height: 1,
                           color: AppColors.forestGreen,
                         ),
+
                         const SizedBox(height: 30),
-                        const AuthInput(label: "Nom Prénom"),
-                        const SizedBox(height: 20),
-                        const AuthInput(
+
+                        _buildInput(
                           label: "Adresse email",
-                          keyboardType: TextInputType.emailAddress,
+                          obscure: false,
                         ),
+
                         const SizedBox(height: 20),
-                        const AuthInput(
+
+                        _buildInput(
                           label: "Mot de passe",
-                          obscureText: true,
+                          obscure: true,
                         ),
+
                         const SizedBox(height: 30),
+
                         LargeActionButton(
-                          title: "Créer un compte",
+                          title: "Se connecter",
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, '/measure');
+                            Navigator.pushReplacementNamed(
+                                context, '/measure');
                           },
                         ),
+
                         const SizedBox(height: 12),
+
                         LargeActionButton(
                           title: "Annuler",
                           onTap: () {
@@ -105,38 +116,23 @@ class RegisterPage extends StatelessWidget {
       ),
     );
   }
-}
 
-class AuthInput extends StatelessWidget {
-  final String label;
-  final bool obscureText;
-  final TextInputType keyboardType;
-
-  const AuthInput({
-    super.key,
-    required this.label,
-    this.obscureText = false,
-    this.keyboardType = TextInputType.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildInput({
+    required String label,
+    required bool obscure,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        Text(label),
         const SizedBox(height: 8),
         SizedBox(
           height: 36,
           child: TextField(
-            obscureText: obscureText,
-            keyboardType: keyboardType,
+            obscureText: obscure,
             decoration: const InputDecoration(
               filled: true,
-              fillColor: AppColors.white,
+              fillColor: Colors.white,
               contentPadding: EdgeInsets.symmetric(horizontal: 8),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
