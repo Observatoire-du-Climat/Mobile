@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/ui/pages/history_page.dart';
 import 'package:mobile/ui/pages/home_page.dart';
@@ -11,7 +13,8 @@ import 'package:mobile/ui/pages/measures/temperature_page.dart';
 import 'package:mobile/ui/pages/profile_page.dart';
 import 'package:mobile/ui/pages/register_page.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
