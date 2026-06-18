@@ -2,7 +2,9 @@ import 'package:mobile/web_providers/user_provider.dart';
 
 class UserRepository {
 
-  final userProvider = UserProvider();
+  final UserProvider userProvider;
+
+  UserRepository(this.userProvider);
 
   Future getUser(int id) => userProvider.getUser(id);
 

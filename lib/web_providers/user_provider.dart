@@ -7,7 +7,7 @@ import 'package:mobile/models/user.dart';
 
 class UserProvider {
 
-  final apiUrl = dotenv.env['API_BASE_URL'];
+  final apiUrl = dotenv.env['BASE_API_URL'];
 
   Future<User> getUser(int id) async {
     final response = await http.get(Uri.parse('$apiUrl/users/0'));
@@ -21,15 +21,35 @@ class UserProvider {
   }
 
   Future<User> createUser(String name, String email, String password) async {
-    final response = await http.post(
-        Uri.parse('$apiUrl/register'),
-        body: jsonEncode(<String, String>{'name': name, 'email': email, 'password': password}));
+    try {
+      print("provider test creation");
+      String uri = '$apiUrl/register';
+      print('Uri : $uri');
 
-    if (response.statusCode == 201) {
-      return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-    } else {
-      throw Exception('Failed to create user');
+      final response = await http.post(
+          Uri.parse(uri),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(<String, String>{
+            'name': name,
+            'email': email,
+            'password': password
+          })).timeout(const Duration(seconds: 10));
+      print("reponse recue");
+      print(response);
+
+      if (response.statusCode == 201) {
+        return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      } else {
+        throw Exception('Failed to create user');
+      }
+
+    } catch (e) {
+      print("Exception");
+      print(e);
+      throw Exception();
     }
+
+
   }
   
   Future<User> loginUser(String email, String password) async {

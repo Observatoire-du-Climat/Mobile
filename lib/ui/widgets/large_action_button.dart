@@ -3,7 +3,7 @@ import '../../app_theme.dart';
 
 class LargeActionButton extends StatelessWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const LargeActionButton({
     super.key,
