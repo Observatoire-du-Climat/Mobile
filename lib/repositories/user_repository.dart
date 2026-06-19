@@ -6,7 +6,7 @@ class UserRepository {
 
   UserRepository(this.userProvider);
 
-  Future getUser(int id) => userProvider.getUser(id);
+  Future getCurrentUser() => userProvider.getCurrentUser();
 
   Future createUser(String name, String email, String password) => userProvider.createUser(name, email, password);
 

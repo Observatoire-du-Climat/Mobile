@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/bloc/user_bloc.dart';
 import 'package:mobile/repositories/user_repository.dart';
+import 'package:mobile/secure_storage.dart';
 import 'package:mobile/ui/pages/history_page.dart';
 import 'package:mobile/ui/pages/home_page.dart';
 import 'package:mobile/ui/pages/login_page.dart';
@@ -21,7 +23,10 @@ Future<void> main() async {
   await dotenv.load(fileName: '.env');
   print("env");
   print(dotenv.env['BASE_API_URL']);
-  final userProvider = UserProvider();
+
+  final storage = SecureStorage();
+
+  final userProvider = UserProvider(storage);
   final userRepository = UserRepository(userProvider);
 
 

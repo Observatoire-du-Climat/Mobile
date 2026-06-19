@@ -3,14 +3,23 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/models/user.dart';
+import 'package:mobile/secure_storage.dart';
 
 
 class UserProvider {
 
   final apiUrl = dotenv.env['BASE_API_URL'];
+  final SecureStorage storage;
 
-  Future<User> getUser(int id) async {
-    final response = await http.get(Uri.parse('$apiUrl/users/0'));
+  UserProvider(this.storage);
+
+  Future<User> getCurrentUser() async {
+    final String? userId = await storage.getUserId();
+    if (userId == null) {
+      throw Exception('No User connected');
+    }
+
+    final response = await http.get(Uri.parse('$apiUrl/users/$userId'));
 
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -38,7 +47,9 @@ class UserProvider {
       print(response);
 
       if (response.statusCode == 201) {
-        return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        final user = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+        storage.writeUserId(user.id);
+        return user;
       } else {
         throw Exception('Failed to create user');
       }
@@ -58,7 +69,9 @@ class UserProvider {
       body: jsonEncode(<String, String>{'email': email, 'password': password}));
 
     if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      final user = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      storage.writeUserId(user.id);
+      return user;
     } else {
       throw Exception('Failed to login');
     }
