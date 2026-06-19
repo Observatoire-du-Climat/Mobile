@@ -9,7 +9,15 @@ class RegisterRequest extends UserEvent {
     required this.name,
     required this.email,
     required this.password
-});
+  });
+}
 
-//class LoginRequest
+class LoginRequest extends UserEvent {
+  final String email;
+  final String password;
+
+  LoginRequest({
+    required this.email,
+    required this.password
+  });
 }

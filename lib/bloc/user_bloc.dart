@@ -11,6 +11,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   UserBloc(this._userRepository) : super(UserNotConnected()) {
     on<RegisterRequest>(_onRegister);
+    on<LoginRequest>(_onLogin);
   }
 
 
@@ -26,6 +27,19 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       print("création ratée");
       emit(UserError('Creation de compte ratée'));
     }
+  }
 
+  Future<void> _onLogin(LoginRequest event, Emitter<UserState> emit) async {
+    print("appel a onLogin dans le bloc");
+    emit(UserLoading());
+
+    try {
+      await _userRepository.loginUser(event.email, event.password);
+      print("user connecté");
+      emit(UserConnected());
+    } catch (e) {
+      print("Login raté");
+      emit(UserError('Login raté'));
+    }
   }
 }
