@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/measure_bloc.dart';
+import 'package:mobile/bloc/measure_state.dart';
+import 'package:mobile/models/measure.dart';
 
 import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/measure_action_button.dart';
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
+  @override
+  State<HistoryPage> createState() => _HistoryPageState();
+
+/*
   static final List<MeasureHistoryItem> testMeasures = [
     MeasureHistoryItem(date: "07.04.2026", type: "Température", value: "39 °C", location: "Yverdon-les-Bains",),
     MeasureHistoryItem(date: "06.04.2026", type: "Hauteur des Neiges"),
@@ -18,65 +26,86 @@ class HistoryPage extends StatelessWidget {
     MeasureHistoryItem(date: "02.04.2026", type: "Relevé des Pontes"),
     MeasureHistoryItem(date: "01.04.2026", type: "Température"),
   ];
+   */
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+
+
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      bottomNavigationBar: const NavBar(current: NavItem.history),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            top: 150,
-            child: Opacity(
-              opacity: 0.5,
-              child: Image.asset(
-                'assets/images/fond_version_clean.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                Image.asset(
-                  'assets/images/logo-vert.png',
-                  height: 70,
-                ),
-                const SizedBox(height: 28),
-                Text(
-                  "Historique des mesures",
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+    return BlocListener<MeasureBloc, MeasureState>(
+        listener: (context, state) {
+
+        },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        bottomNavigationBar: const NavBar(current: NavItem.history),
+        body: BlocBuilder<MeasureBloc, MeasureState>(
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    top: 150,
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Image.asset(
+                        'assets/images/fond_version_clean.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  width: 170,
-                  height: 2,
-                  color: AppColors.forestGreen,
-                ),
-                const SizedBox(height: 28),
-                Expanded(
-                  child: ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    itemCount: testMeasures.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 15),
-                    itemBuilder: (context, index) {
-                      return HistoryCard(item: testMeasures[index]);
-                    },
+                  SafeArea(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Image.asset(
+                          'assets/images/logo-vert.png',
+                          height: 70,
+                        ),
+                        const SizedBox(height: 28),
+                        Text(
+                          "Historique des mesures",
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          width: 170,
+                          height: 2,
+                          color: AppColors.forestGreen,
+                        ),
+                        const SizedBox(height: 28),
+                        if (state is MeasureLoading) const Text("Chargement..."),
+                        if (state is MeasureFetchedEmpty) const Text("Aucune mesure"),
+                        if (state is MeasureFetched)
+                        Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            itemCount: state.measures.length,
+                            separatorBuilder: (_, __) => const SizedBox(height: 15),
+                            itemBuilder: (context, index) {
+                              return HistoryCard(item: state.measures[index]);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
+                ],
+              );
+            }
+        )
       ),
     );
   }
 }
-
+/*
 class MeasureHistoryItem {
   final String date;
   final String type;
@@ -90,9 +119,9 @@ class MeasureHistoryItem {
     this.location,
   });
 }
-
+*/
 class HistoryCard extends StatelessWidget {
-  final MeasureHistoryItem item;
+  final Measure item;
 
   const HistoryCard({
     super.key,
@@ -117,7 +146,7 @@ class HistoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.date,
+                  item.date.toString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -149,7 +178,7 @@ class HistoryCard extends StatelessWidget {
 }
 
 class MeasureDetailsDialog extends StatelessWidget {
-  final MeasureHistoryItem item;
+  final Measure item;
 
   const MeasureDetailsDialog({
     super.key,
@@ -183,7 +212,7 @@ class MeasureDetailsDialog extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            DetailRow(label: "Date", value: item.date),
+            DetailRow(label: "Date", value: item.date.toString()),
             DetailRow(label: "Degré", value: "39 °C"),
             const DetailRow(label: "Lieu", value: "Yverdon-les-Bains"),
 
