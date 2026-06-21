@@ -20,3 +20,14 @@ class MeasureError extends MeasureState {
 
   MeasureError(this.message);
 }
+
+
+class MeasureCreationLoading extends MeasureState {}
+
+class MeasureCreated extends MeasureState {}
+
+class MeasureCreationError extends MeasureState {
+  final String message;
+
+  MeasureCreationError(this.message);
+}

@@ -3,7 +3,7 @@ import '../../app_theme.dart';
 
 class MeasureActionButton extends StatelessWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const MeasureActionButton({
     super.key,

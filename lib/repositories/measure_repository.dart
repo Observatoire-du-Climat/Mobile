@@ -7,4 +7,7 @@ class MeasureRepository {
   MeasureRepository(this.measureProvider);
 
   Future getUserMeasures() => measureProvider.getUserMeasures();
+
+  Future createTemperature(DateTime date, String location, int degree) =>
+      measureProvider.createTemperature(date, location, degree);
 }

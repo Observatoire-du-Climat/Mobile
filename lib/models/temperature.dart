@@ -1,0 +1,27 @@
+import 'package:mobile/models/measure.dart';
+
+class Temperature extends Measure {
+
+  final int degree;
+
+  Temperature({
+    required super.id,
+    required super.date,
+    required super.location,
+    required super.type,
+    required this.degree
+  });
+
+  factory Temperature.fromJson(Map<String, dynamic> json) {
+    return switch (json) {
+      {'id' : int id, 'date' : DateTime date, 'location' : String location, 'type' : String type, 'degree' : int degree} => Temperature(
+          id: id,
+          date: date,
+          location: location,
+          type: type,
+          degree : degree
+      ),
+      _ => throw const FormatException('Failed to load Temperature measure')
+    };
+  }
+}

@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:mobile/app_theme.dart';
+import 'package:mobile/bloc/measure_bloc.dart';
 import 'package:mobile/bloc/user_bloc.dart';
+import 'package:mobile/repositories/measure_repository.dart';
 import 'package:mobile/repositories/user_repository.dart';
 import 'package:mobile/secure_storage.dart';
 import 'package:mobile/ui/pages/history_page.dart';
@@ -16,6 +18,7 @@ import 'package:mobile/ui/pages/measures/snow_height_page.dart';
 import 'package:mobile/ui/pages/measures/temperature_page.dart';
 import 'package:mobile/ui/pages/profile_page.dart';
 import 'package:mobile/ui/pages/register_page.dart';
+import 'package:mobile/web_providers/measure_provider.dart';
 import 'package:mobile/web_providers/user_provider.dart';
 
 Future<void> main() async {
@@ -28,17 +31,22 @@ Future<void> main() async {
   final userProvider = UserProvider(storage);
   final userRepository = UserRepository(userProvider);
 
+  final measureProvider = MeasureProvider(storage);
+  final measureRepository = MeasureRepository(measureProvider);
 
-  runApp(MyApp(userRepository: userRepository,));
+
+  runApp(MyApp(userRepository: userRepository, measureRepository: measureRepository,));
 }
 
 class MyApp extends StatelessWidget {
 
   final UserRepository userRepository;
+  final MeasureRepository measureRepository;
 
   const MyApp({
     super.key,
-    required this.userRepository
+    required this.userRepository,
+    required this.measureRepository
   });
 
 
@@ -49,6 +57,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (_) => UserBloc(userRepository),
           ),
+          BlocProvider(
+            create: (_) => MeasureBloc(measureRepository),
+          )
         ],
         child: MaterialApp(
           title: 'Observatoire Citoyen du Climat',
