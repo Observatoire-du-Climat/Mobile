@@ -37,6 +37,7 @@ class MeasureTextField extends StatelessWidget {
               child: TextFormField(
                 controller: controller,
                 readOnly: readOnly,
+                onTap: onTap,
                 keyboardType: keyboardType,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {

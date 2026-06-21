@@ -15,6 +15,6 @@ class MeasureDateField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MeasureTextField(label: label, controller: controller, readOnly: true,);
+    return MeasureTextField(label: label, controller: controller, readOnly: true, onTap: onTap,);
   }
 }

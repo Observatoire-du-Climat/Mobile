@@ -56,8 +56,33 @@ class _TemperaturePageState extends State<TemperaturePage> {
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
         context: context,
+        initialDate: _selectedDate ?? DateTime.now(),
         firstDate: DateTime(2020),
-        lastDate: DateTime.now());
+        lastDate: DateTime.now(),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: AppColors.forestGreen,
+                onPrimary: AppColors.white,
+                onSurface: Colors.black,
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.forestGreen,
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        },
+    );
+
+
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
@@ -69,11 +94,15 @@ class _TemperaturePageState extends State<TemperaturePage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<MeasureBloc, MeasureState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is MeasureCreationError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
         child: Scaffold(
           backgroundColor: AppColors.white,
           bottomNavigationBar: const NavBar(current: NavItem.measure),
-          body: BlocBuilder(
+          body: BlocBuilder<MeasureBloc, MeasureState>(
               builder: (context, state) {
                 final isLoading = state is MeasureCreationLoading;
 
@@ -96,54 +125,57 @@ class _TemperaturePageState extends State<TemperaturePage> {
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(color: AppColors.forestGreen),
                           ),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Température",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const SizedBox(height: 8),
-                              Container(
-                                width: 170,
-                                height: 1,
-                                color: AppColors.forestGreen,
-                              ),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Température",
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 170,
+                                  height: 1,
+                                  color: AppColors.forestGreen,
+                                ),
 
-                              const SizedBox(height: 32),
+                                const SizedBox(height: 32),
 
-                              MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
-                              MeasureTextField(label: "Degré", controller: _locationController,),
-                              MeasureTextField(label: "Lieu", controller: _degreeController,),
+                                MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate),
+                                MeasureTextField(label: "Lieu", controller: _locationController,),
+                                MeasureTextField(label: "Degré", controller: _degreeController,),
 
-                              const SizedBox(height: 24),
+                                const SizedBox(height: 24),
 
-                              Column(
-                                children: [
-                                  MeasureActionButton(
-                                    title: "Photo",
-                                    onTap: () {
-                                      //
-                                    },
-                                  ),
-                                  const SizedBox(height: 12),
-                                  MeasureActionButton(
-                                    title: isLoading ? "Chargement..." : "Valider",
-                                    onTap: isLoading ? null : () {
-                                      if (!_formKey.currentState!.validate()) {
-                                        return;
-                                      }
-                                      context.read<MeasureBloc>().add(
-                                        CreateTemperatureRequest(
-                                            date: _selectedDate!,
-                                            location: _locationController.text.trim(),
-                                            degree: int.parse(_degreeController.text.trim()))
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                Column(
+                                  children: [
+                                    MeasureActionButton(
+                                      title: "Photo",
+                                      onTap: () {
+                                        //
+                                      },
+                                    ),
+                                    const SizedBox(height: 12),
+                                    MeasureActionButton(
+                                      title: isLoading ? "Chargement..." : "Valider",
+                                      onTap: isLoading ? null : () {
+                                        if (!_formKey.currentState!.validate()) {
+                                          return;
+                                        }
+                                        context.read<MeasureBloc>().add(
+                                            CreateTemperatureRequest(
+                                                date: _selectedDate!,
+                                                location: _locationController.text.trim(),
+                                                degree: int.parse(_degreeController.text.trim()))
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
                         ),
 
                         const SizedBox(height: 32),

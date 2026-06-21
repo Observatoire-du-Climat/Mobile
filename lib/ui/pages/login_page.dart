@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         },
         child: Scaffold(
           backgroundColor: AppColors.white,
-          body: BlocBuilder(
+          body: BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
                 final isLoading = state is UserLoading;
 
@@ -98,60 +98,63 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(color: AppColors.forestGreen),
                               ),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    "Connexion",
-                                    style: Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Container(
-                                    height: 1,
-                                    color: AppColors.forestGreen,
-                                  ),
+                              child: Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "Connexion",
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Container(
+                                      height: 1,
+                                      color: AppColors.forestGreen,
+                                    ),
 
-                                  const SizedBox(height: 30),
+                                    const SizedBox(height: 30),
 
-                                  _buildInput(
-                                    label: "Adresse email",
-                                    obscure: false,
-                                    controller: _emailController
-                                  ),
+                                    _buildInput(
+                                        label: "Adresse email",
+                                        obscure: false,
+                                        controller: _emailController
+                                    ),
 
-                                  const SizedBox(height: 20),
+                                    const SizedBox(height: 20),
 
-                                  _buildInput(
-                                    label: "Mot de passe",
-                                    obscure: true,
-                                    controller: _passwordController
-                                  ),
+                                    _buildInput(
+                                        label: "Mot de passe",
+                                        obscure: true,
+                                        controller: _passwordController
+                                    ),
 
-                                  const SizedBox(height: 30),
+                                    const SizedBox(height: 30),
 
-                                  LargeActionButton(title: isLoading ? "Chargement..." : "Créer un compte",
-                                    onTap: isLoading ? null : () {
-                                      if (!_formKey.currentState!.validate()) {
-                                        return;
-                                      }
-                                      context.read<UserBloc>().add(
-                                          LoginRequest(
-                                              email: _emailController.text,
-                                              password: _passwordController.text
-                                          )
-                                      );
-                                    },
-                                  ),
+                                    LargeActionButton(title: isLoading ? "Chargement..." : "Se connecter",
+                                      onTap: isLoading ? null : () {
+                                        if (!_formKey.currentState!.validate()) {
+                                          return;
+                                        }
+                                        context.read<UserBloc>().add(
+                                            LoginRequest(
+                                                email: _emailController.text,
+                                                password: _passwordController.text
+                                            )
+                                        );
+                                      },
+                                    ),
 
-                                  const SizedBox(height: 12),
+                                    const SizedBox(height: 12),
 
-                                  LargeActionButton(
-                                    title: "Annuler",
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                ],
-                              ),
+                                    LargeActionButton(
+                                      title: "Annuler",
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              )
                             ),
                           ],
                         ),

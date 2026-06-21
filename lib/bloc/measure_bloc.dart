@@ -32,9 +32,11 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     emit(MeasureCreationLoading());
 
     try {
+      print("envoie de la mesure au provider");
       await _measureRepository.createTemperature(request.date, request.location, request.degree);
       emit(MeasureCreated());
     } catch (e) {
+      print('Error : $e');
       emit(MeasureCreationError('Failed to create Temperature Measure'));
     }
   }
