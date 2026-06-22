@@ -34,11 +34,12 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     emit(UserLoading());
 
     try {
-      //await _userRepository.loginUser(event.email, event.password);
+      await _userRepository.loginUser(event.email, event.password);
       print("user connecté");
       emit(UserConnected());
     } catch (e) {
-      print("Login raté");
+      print("Login ratééééé");
+      print('Exception : $e');
       emit(UserError('Login raté'));
     }
   }

@@ -14,9 +14,9 @@ class Temperature extends Measure {
 
   factory Temperature.fromJson(Map<String, dynamic> json) {
     return switch (json) {
-      {'id' : int id, 'date' : DateTime date, 'location' : String location, 'type' : String type, 'degree' : int degree} => Temperature(
+      {'id' : int id, 'date' : String date, 'location' : String location, 'type' : String type, 'degree' : int degree} => Temperature(
           id: id,
-          date: date,
+          date: DateTime.parse(date),
           location: location,
           type: type,
           degree : degree

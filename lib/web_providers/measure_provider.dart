@@ -23,9 +23,15 @@ class MeasureProvider {
     }
     
     final response = await http.get(Uri.parse('$apiUrl/measures/user/$userId'));
+    print('response code :  ${response.statusCode}');
+    print(response.body);
 
     if (response.statusCode == 200) {
-      return json.decode(response.body)['measures'].map((m) => Measure.fromJson(m)).toList();
+      //return json.decode(response.body).map((m) => Measure.fromJson(m)).toList();
+      final List<dynamic> decoded = jsonDecode(response.body);
+      return decoded
+          .map((m) => Measure.fromJson(m as Map<String, dynamic>))
+          .toList();
     } else {
       throw Exception('Failed to fetch measures');
     }
@@ -50,6 +56,9 @@ class MeasureProvider {
             'degree': degree
           })
       ).timeout(Duration(seconds: 10));
+
+      print('response code : ${response.statusCode}');
+      print(response);
 
       if (response.statusCode == 201) {
         final temperature = Temperature.fromJson(

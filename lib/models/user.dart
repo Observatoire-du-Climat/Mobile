@@ -11,7 +11,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return switch (json) {
-      {'userId': int id, 'name': String name, 'email': String email} => User(
+      {'id': int id, 'name': String name, 'email': String email} => User(
         id: id,
         name: name,
         email: email

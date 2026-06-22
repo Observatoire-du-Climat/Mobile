@@ -24,6 +24,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       }
       emit(MeasureFetched(measures));
     } catch (e) {
+      print('Error : $e');
       emit(MeasureError('Failed to fetch Measures'));
     }
   }

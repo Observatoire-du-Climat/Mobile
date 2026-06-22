@@ -13,13 +13,23 @@ class Measure {
 
   factory Measure.fromJson(Map<String, dynamic> json) {
     return switch (json) {
-      {'id' : int id, 'date' : DateTime date, 'location' : String location, 'type' : String type} => Measure(
+      {'id' : int id, 'date' : String date, 'location' : String location, 'type' : String type} => Measure(
         id: id,
-        date: date,
+        date: DateTime.parse(date),
         location: location,
         type: type
       ),
       _ => throw const FormatException('Failed to load Measure')
     };
+  }
+
+  String typeToString() {
+    switch (type) {
+      case "TEMPERATURE" : return "Température";
+      case "SNOW-HEIGHT" : return "Hauteur des Neiges";
+      case "BIRD-MIGRATION" : return "Migrations des oiseaux";
+      case "EGGS-LAYING" : return "Relevé des pontes";
+      default: return "";
+    }
   }
 }

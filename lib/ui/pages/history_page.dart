@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/bloc/measure_bloc.dart';
+import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/bloc/measure_state.dart';
 import 'package:mobile/models/measure.dart';
 
@@ -31,7 +33,14 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
 
+  @override
+  void initState() {
+    super.initState();
+    //load the measures
+    context.read<MeasureBloc>().add(UserMeasureRequest());
+  }
 
+  @override
   void dispose() {
     super.dispose();
   }
@@ -39,9 +48,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<MeasureBloc, MeasureState>(
-        listener: (context, state) {
-
-        },
+      listener: (context, state) {},
       child: Scaffold(
         backgroundColor: AppColors.white,
         bottomNavigationBar: const NavBar(current: NavItem.history),
@@ -88,7 +95,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           child: ListView.separated(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             itemCount: state.measures.length,
-                            separatorBuilder: (_, __) => const SizedBox(height: 15),
+                            separatorBuilder: (_, _) => const SizedBox(height: 15),
                             itemBuilder: (context, index) {
                               return HistoryCard(item: state.measures[index]);
                             },
@@ -146,14 +153,14 @@ class HistoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  item.date.toString(),
+                  DateFormat('dd.MM.yyyy').format(item.date),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 7),
                 Text(
-                  item.type,
+                  item.typeToString(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
