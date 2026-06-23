@@ -15,20 +15,6 @@ class HistoryPage extends StatefulWidget {
 
   @override
   State<HistoryPage> createState() => _HistoryPageState();
-
-/*
-  static final List<MeasureHistoryItem> testMeasures = [
-    MeasureHistoryItem(date: "07.04.2026", type: "Température", value: "39 °C", location: "Yverdon-les-Bains",),
-    MeasureHistoryItem(date: "06.04.2026", type: "Hauteur des Neiges"),
-    MeasureHistoryItem(date: "06.04.2026", type: "Température"),
-    MeasureHistoryItem(date: "05.04.2026", type: "Température"),
-    MeasureHistoryItem(date: "05.04.2026", type: "Hauteur des Neiges"),
-    MeasureHistoryItem(date: "04.04.2026", type: "Température"),
-    MeasureHistoryItem(date: "03.04.2026", type: "Migrations des Oiseaux"),
-    MeasureHistoryItem(date: "02.04.2026", type: "Relevé des Pontes"),
-    MeasureHistoryItem(date: "01.04.2026", type: "Température"),
-  ];
-   */
 }
 
 class _HistoryPageState extends State<HistoryPage> {
@@ -112,21 +98,7 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 }
-/*
-class MeasureHistoryItem {
-  final String date;
-  final String type;
-  final String? value;
-  final String? location;
 
-  const MeasureHistoryItem({
-    required this.date,
-    required this.type,
-    this.value,
-    this.location,
-  });
-}
-*/
 class HistoryCard extends StatelessWidget {
   final Measure item;
 
@@ -219,7 +191,7 @@ class MeasureDetailsDialog extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            DetailRow(label: "Date", value: item.date.toString()),
+            DetailRow(label: "Date", value: DateFormat('dd.MM.yyyy').format(item.date)),
             DetailRow(label: "Degré", value: "39 °C"),
             const DetailRow(label: "Lieu", value: "Yverdon-les-Bains"),
 
