@@ -44,6 +44,12 @@ class _TemperaturePageState extends State<TemperaturePage> {
   final _degreeController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    //load the measures
+  }
+
+  @override
   void dispose() {
     _dateController.dispose();
     _locationController.dispose();
@@ -82,7 +88,6 @@ class _TemperaturePageState extends State<TemperaturePage> {
         },
     );
 
-
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
@@ -97,6 +102,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
         listener: (context, state) {
           if (state is MeasureCreationError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+          if (state is MeasureCreated) {
+            Navigator.pop(context);
           }
         },
         child: Scaffold(

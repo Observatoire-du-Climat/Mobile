@@ -11,6 +11,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
   MeasureBloc(this._measureRepository) : super(MeasureNotFetched()) {
     on<UserMeasureRequest>(_onUserMeasureRequest);
     on<CreateTemperatureRequest>(_onCreateTemperatureRequest);
+    on<CreateSnowHeightRequest>(_onCreateSnowHeightRequest);
   }
 
   Future<void> _onUserMeasureRequest(UserMeasureRequest request, Emitter<MeasureState> emit) async {
@@ -42,5 +43,17 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  Future<void> _onCreateSnowHeightRequest(CreateSnowHeightRequest request, Emitter<MeasureState> emit) async {
+    emit(MeasureCreationLoading());
+
+    try {
+      print("envoie de la mesure au provider");
+      await _measureRepository.createSnowHeight(request.date, request.location, request.height, request.weather, request.precipitation);
+      emit(MeasureCreated());
+    } catch(e) {
+      print('Error : $e');
+      emit(MeasureCreationError('Failed to create SnowHeight Measure'));
+    }
+  }
 
 }

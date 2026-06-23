@@ -206,7 +206,7 @@ class MeasureDetailsDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              item.type,
+              item.typeToString(),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.titleMedium,
             ),

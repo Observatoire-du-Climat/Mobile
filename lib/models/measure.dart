@@ -26,7 +26,7 @@ class Measure {
   String typeToString() {
     switch (type) {
       case "TEMPERATURE" : return "Température";
-      case "SNOW-HEIGHT" : return "Hauteur des Neiges";
+      case "SNOW_HEIGHT" : return "Hauteur des Neiges";
       case "BIRD-MIGRATION" : return "Migrations des oiseaux";
       case "EGGS-LAYING" : return "Relevé des pontes";
       default: return "";
