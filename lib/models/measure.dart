@@ -27,8 +27,8 @@ class Measure {
     switch (type) {
       case "TEMPERATURE" : return "Température";
       case "SNOW_HEIGHT" : return "Hauteur des Neiges";
-      case "BIRD-MIGRATION" : return "Migrations des oiseaux";
-      case "EGGS-LAYING" : return "Relevé des pontes";
+      case "BIRD_MIGRATION" : return "Migrations des oiseaux";
+      case "EGGS_LAYING" : return "Relevé des pontes";
       default: return "";
     }
   }

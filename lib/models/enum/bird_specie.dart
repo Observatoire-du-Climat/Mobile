@@ -1,0 +1,4 @@
+enum BirdSpecie {
+  swallow,
+  swift,
+}

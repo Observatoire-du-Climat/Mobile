@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:mobile/models/bird_migration.dart';
+import 'package:mobile/models/enum/bird_event_type.dart';
+import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/enum/weather_type.dart';
 import 'package:mobile/models/measure.dart';
 import 'package:mobile/models/snow_height.dart';
@@ -103,7 +106,42 @@ class MeasureProvider {
             jsonDecode(response.body) as Map<String, dynamic>);
         return snowHeight;
       } else {
-        throw Exception('Failed to create Temperature measure');
+        throw Exception('Failed to create SnowHeight measure');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<BirdMigration> createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final response = await http.post(
+          Uri.parse('$apiUrl/measures/bird-migration'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'userId': userId,
+            'date': dateFormat.format(date),
+            'location': location,
+            'specie': specie.name,
+            'event': event.name,
+          })
+      ).timeout(Duration(seconds: 10));
+
+      print('response code : ${response.statusCode}');
+      print(response);
+
+      if (response.statusCode == 201) {
+        final birdMigration = BirdMigration.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return birdMigration;
+      } else {
+        throw Exception('Failed to create BirdMigration measure');
       }
     } catch (e) {
       print(e);

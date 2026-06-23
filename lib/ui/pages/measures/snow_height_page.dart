@@ -43,7 +43,6 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
   final _dateController = TextEditingController();
   final _locationController = TextEditingController();
   final _heightController = TextEditingController();
-  final _weatherController = TextEditingController();
   final _precipitationController = TextEditingController();
 
   @override
@@ -51,7 +50,6 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
     _dateController.dispose();
     _locationController.dispose();
     _heightController.dispose();
-    _weatherController.dispose();
     _precipitationController.dispose();
     super.dispose();
   }
@@ -98,7 +96,14 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<MeasureBloc, MeasureState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is MeasureCreationError) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+        if (state is MeasureCreated) {
+          Navigator.pop(context);
+        }
+      },
       child: Scaffold(
         backgroundColor: AppColors.white,
         bottomNavigationBar: const NavBar(current: NavItem.measure),

@@ -1,3 +1,5 @@
+import 'package:mobile/models/enum/bird_event_type.dart';
+import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/enum/weather_type.dart';
 
 abstract class MeasureEvent {}
@@ -30,4 +32,19 @@ class CreateSnowHeightRequest extends MeasureEvent {
     required this.weather,
     required this.precipitation
   });
+}
+
+class CreateBirdMigrationRequest extends MeasureEvent {
+  final DateTime date;
+  final String location;
+  final BirdSpecie specie;
+  final BirdEventType event;
+
+  CreateBirdMigrationRequest({
+    required this.date,
+    required this.location,
+    required this.specie,
+    required this.event
+  });
+
 }

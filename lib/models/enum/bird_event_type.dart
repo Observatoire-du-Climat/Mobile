@@ -1,0 +1,4 @@
+enum BirdEventType {
+  arrival,
+  departure
+}

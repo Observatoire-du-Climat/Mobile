@@ -12,6 +12,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     on<UserMeasureRequest>(_onUserMeasureRequest);
     on<CreateTemperatureRequest>(_onCreateTemperatureRequest);
     on<CreateSnowHeightRequest>(_onCreateSnowHeightRequest);
+    on<CreateBirdMigrationRequest>(_onCreateBirdMigrationRequest);
   }
 
   Future<void> _onUserMeasureRequest(UserMeasureRequest request, Emitter<MeasureState> emit) async {
@@ -53,6 +54,19 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     } catch(e) {
       print('Error : $e');
       emit(MeasureCreationError('Failed to create SnowHeight Measure'));
+    }
+  }
+
+  Future<void> _onCreateBirdMigrationRequest(CreateBirdMigrationRequest request, Emitter<MeasureState> emit) async {
+    emit(MeasureCreationLoading());
+
+    try {
+      print("envoie de la mesure au provider");
+      await _measureRepository.createBirdMigration(request.date, request.location, request.specie, request.event);
+      emit(MeasureCreated());
+    } catch(e) {
+      print('Error : $e');
+      emit(MeasureCreationError('Failed to create BirdMigration Measure'));
     }
   }
 

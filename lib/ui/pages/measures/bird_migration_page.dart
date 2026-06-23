@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/bloc/measure_bloc.dart';
+import 'package:mobile/bloc/measure_event.dart';
+import 'package:mobile/bloc/measure_state.dart';
+import 'package:mobile/models/enum/bird_event_type.dart';
+import 'package:mobile/models/enum/bird_specie.dart';
+import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
+import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
 
 import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
@@ -18,7 +27,8 @@ class BirdMigrationPage extends StatefulWidget {
 }
 
 class _BirdMigrationPageState extends State<BirdMigrationPage> {
-  MigrationType _migrationType = MigrationType.arrival;
+  BirdSpecie _specie = BirdSpecie.swallow;
+  BirdEventType _eventType = BirdEventType.arrival;
 
   static const String indicatorInfo =
       "Les hirondelles et les martinets sont des oiseaux migrateurs parcourant chaque année plusieurs milliers de kilomètres "
@@ -37,106 +47,175 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
       "Il n’est pas nécessaire que ces individus soient associés à un site en particulier : il suffit simplement de noter "
       "les premiers oiseaux observés dans le ciel et les derniers à repartir.";
 
+  final _formKey = GlobalKey<FormState>();
+  final _dateController = TextEditingController();
+  final _locationController = TextEditingController();
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
+
+  DateTime? _selectedDate;
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppColors.forestGreen,
+              onPrimary: AppColors.white,
+              onSurface: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.forestGreen,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _dateController.text = DateFormat('dd.MM.yyyy').format(picked);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      bottomNavigationBar: const NavBar(current: NavItem.measure),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/logo-vert.png',
-                height: 70,
-              ),
-              const SizedBox(height: 40),
-              _BirdMigrationForm(
-                migrationType: _migrationType,
-                onMigrationChanged: (value) {
-                  if (value == null) return;
+    return BlocListener<MeasureBloc, MeasureState>(
+        listener: (context, state) {
+          if (state is MeasureCreationError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+          if (state is MeasureCreated) {
+            Navigator.pop(context);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.white,
+          bottomNavigationBar: const NavBar(current: NavItem.measure),
+          body: BlocBuilder<MeasureBloc, MeasureState>(
+              builder: (context, state) {
+                final isLoading = state is MeasureCreationLoading;
+                return SafeArea(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/logo-vert.png',
+                          height: 70,
+                        ),
+                        const SizedBox(height: 40),
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: AppColors.lightGrey,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.forestGreen),
+                          ),
+                          child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Migrations des Oiseaux",
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: 170,
+                                    height: 1,
+                                    color: AppColors.forestGreen,
+                                  ),
+                                  const SizedBox(height: 32),
+                                  MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate),
+                                  MeasureTextField(label: "Lieu", controller: _locationController,),
+                                  _SpecieDropDown(
+                                      selected: _specie,
+                                      onChanged: (value) {
+                                        if (value == null) return;
 
-                  setState(() {
-                    _migrationType = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 32),
-              const InfoTextSection(
-                title: "Informations sur l'indicateur",
-                paragraph: indicatorInfo,
-              ),
-              const SizedBox(height: 32),
-              const InfoTextSection(
-                title: "Tutoriel",
-                paragraph: tutorial,
-              ),
-            ],
-          ),
-        ),
-      ),
+                                        setState(() {
+                                          _specie = value;
+                                        });
+                                      }),
+                                  _EventDropDown(
+                                      selected: _eventType,
+                                      onChanged: (value) {
+                                        if (value == null) return;
+
+                                        setState(() {
+                                          _eventType = value;
+                                        });
+                                      }),
+                                  const SizedBox(height: 24),
+                                  MeasureActionButton(
+                                    title: isLoading ? "Chargement..." : "Valider",
+                                    onTap: isLoading ? null : () {
+                                      if (!_formKey.currentState!.validate()) {
+                                        return;
+                                      }
+                                      context.read<MeasureBloc>().add(
+                                          CreateBirdMigrationRequest(
+                                              date: _selectedDate!,
+                                              location: _locationController.text.trim(),
+                                              specie: _specie,
+                                              event: _eventType
+                                          )
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                          )
+                        ),
+                        const SizedBox(height: 32),
+                        const InfoTextSection(
+                          title: "Informations sur l'indicateur",
+                          paragraph: indicatorInfo,
+                        ),
+                        const SizedBox(height: 32),
+                        const InfoTextSection(
+                          title: "Tutoriel",
+                          paragraph: tutorial,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+          )
+        )
     );
   }
 }
 
-class _BirdMigrationForm extends StatelessWidget {
-  final MigrationType migrationType;
-  final ValueChanged<MigrationType?> onMigrationChanged;
+class _SpecieDropDown extends StatelessWidget {
+  final BirdSpecie selected;
+  final ValueChanged<BirdSpecie?> onChanged;
 
-  const _BirdMigrationForm({
-    required this.migrationType,
-    required this.onMigrationChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.lightGrey,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.forestGreen),
-      ),
-      child: Column(
-        children: [
-          Text(
-            "Migrations des Oiseaux",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: 170,
-            height: 1,
-            color: AppColors.forestGreen,
-          ),
-          const SizedBox(height: 32),
-          const _BirdField(label: "Date"),
-          const _BirdField(label: "Oiseaux"),
-          _MigrationRadioGroup(
-            selected: migrationType,
-            onChanged: onMigrationChanged,
-          ),
-          const _BirdField(label: "Lieu"),
-          const SizedBox(height: 24),
-          MeasureActionButton(
-            title: "Valider",
-            onTap: () {
-              //
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BirdField extends StatelessWidget {
-  final String label;
-
-  const _BirdField({
-    required this.label,
+  const _SpecieDropDown({
+    required this.selected,
+    required this.onChanged,
   });
 
   @override
@@ -146,16 +225,18 @@ class _BirdField extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 120,
+            width: 145,
             child: Text(
-              "$label :",
+              "Espèce :",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Expanded(
             child: SizedBox(
-              height: 34,
-              child: TextField(
+              height: 40,
+              child: DropdownButtonFormField<BirdSpecie>(
+                value: selected,
+                isExpanded: true,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: AppColors.white,
@@ -165,6 +246,17 @@ class _BirdField extends StatelessWidget {
                     borderSide: BorderSide.none,
                   ),
                 ),
+                items: const [
+                  DropdownMenuItem(
+                    value: BirdSpecie.swallow,
+                    child: Text("Hirondelles"),
+                  ),
+                  DropdownMenuItem(
+                    value: BirdSpecie.swift,
+                    child: Text("Martinets"),
+                  ),
+                ],
+                onChanged: onChanged,
               ),
             ),
           ),
@@ -174,11 +266,11 @@ class _BirdField extends StatelessWidget {
   }
 }
 
-class _MigrationRadioGroup extends StatelessWidget {
-  final MigrationType selected;
-  final ValueChanged<MigrationType?> onChanged;
+class _EventDropDown extends StatelessWidget {
+  final BirdEventType selected;
+  final ValueChanged<BirdEventType?> onChanged;
 
-  const _MigrationRadioGroup({
+  const _EventDropDown({
     required this.selected,
     required this.onChanged,
   });
@@ -188,67 +280,44 @@ class _MigrationRadioGroup extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 120,
+            width: 145,
             child: Text(
-              "Arrivée / Départ :",
+              "Arrivée/Départ :",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
           Expanded(
-            child: Column(
-              children: [
-                _MigrationRadioOption(
-                  label: "Arrivée",
-                  value: MigrationType.arrival,
-                  selected: selected,
-                  onChanged: onChanged,
+            child: SizedBox(
+              height: 40,
+              child: DropdownButtonFormField<BirdEventType>(
+                value: selected,
+                isExpanded: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: AppColors.white,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
-                _MigrationRadioOption(
-                  label: "Départ",
-                  value: MigrationType.departure,
-                  selected: selected,
-                  onChanged: onChanged,
-                ),
-              ],
+                items: const [
+                  DropdownMenuItem(
+                    value: BirdEventType.arrival,
+                    child: Text("Arrivée"),
+                  ),
+                  DropdownMenuItem(
+                    value: BirdEventType.departure,
+                    child: Text("Départ"),
+                  ),
+                ],
+                onChanged: onChanged,
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _MigrationRadioOption extends StatelessWidget {
-  final String label;
-  final MigrationType value;
-  final MigrationType selected;
-  final ValueChanged<MigrationType?> onChanged;
-
-  const _MigrationRadioOption({
-    required this.label,
-    required this.value,
-    required this.selected,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 28,
-      child: RadioListTile<MigrationType>(
-        value: value,
-        groupValue: selected,
-        onChanged: onChanged,
-        dense: true,
-        contentPadding: EdgeInsets.zero,
-        activeColor: AppColors.forestGreen,
-        title: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
       ),
     );
   }
