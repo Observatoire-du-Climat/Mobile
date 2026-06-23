@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/bloc/measure_bloc.dart';
+import 'package:mobile/bloc/measure_event.dart';
+import 'package:mobile/bloc/measure_state.dart';
+import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
+import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
 
 import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 
-class EggsLayingPage extends StatelessWidget {
+class EggsLayingPage extends StatefulWidget {
   const EggsLayingPage({super.key});
+
+  @override
+  State<EggsLayingPage> createState() => _EggsLayingPageState();
+
+}
+
+class _EggsLayingPageState extends State<EggsLayingPage> {
 
   static const String indicatorInfo =
       "Les amphibiens, tels que le crapaud commun ou la grenouille rousse, sont sensibles aux variations climatiques, "
@@ -23,133 +37,158 @@ class EggsLayingPage extends StatelessWidget {
       "Comptez, à chaque passage, le nombre de pontes des espèces présentes dans l’ensemble du plan d’eau et reportez les résultats.\n\n"
       "Il est normal de compter plusieurs fois les mêmes pontes d’une semaine à l’autre, jusqu’à leur éclosion.";
 
+  final _formKey = GlobalKey<FormState>();
+  final _dateController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _numberController = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      bottomNavigationBar: const NavBar(current: NavItem.measure),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/logo-vert.png',
-                height: 70,
-              ),
-              const SizedBox(height: 40),
-              const _EggLayingForm(),
-              const SizedBox(height: 32),
-              const InfoTextSection(
-                title: "Informations sur l'indicateur",
-                paragraph: indicatorInfo,
-              ),
-              const SizedBox(height: 32),
-              const InfoTextSection(
-                title: "Tutoriel",
-                paragraph: tutorial,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  void dispose() {
+    _dateController.dispose();
+    _locationController.dispose();
+    _numberController.dispose();
+    super.dispose();
   }
-}
 
-class _EggLayingForm extends StatelessWidget {
-  const _EggLayingForm();
+  DateTime? _selectedDate;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.lightGrey,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.forestGreen),
-      ),
-      child: Column(
-        children: [
-          Text(
-            "Relevé des Pontes",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: 170,
-            height: 1,
-            color: AppColors.forestGreen,
-          ),
-          const SizedBox(height: 32),
-          const _EggField(label: "Date"),
-          const _EggField(label: "Nombre de pontes"),
-          const _EggField(label: "Lieu"),
-          const SizedBox(height: 24),
-          Column(
-            children: [
-              MeasureActionButton(
-                title: "Photo",
-                onTap: () {
-                  //
-                },
-              ),
-              const SizedBox(height: 12),
-              MeasureActionButton(
-                title: "Valider",
-                onTap: () {
-                  //
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _EggField extends StatelessWidget {
-  final String label;
-
-  const _EggField({
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 140,
-            child: Text(
-              "$label :",
-              style: Theme.of(context).textTheme.bodyMedium,
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppColors.forestGreen,
+              onPrimary: AppColors.white,
+              onSurface: Colors.black,
             ),
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 34,
-              child: TextField(
-                keyboardType: label == "Nombre de pontes"
-                    ? TextInputType.number
-                    : TextInputType.text,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.white,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide.none,
-                  ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.forestGreen,
+                textStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
           ),
-        ],
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _dateController.text = DateFormat('dd.MM.yyyy').format(picked);
+      });
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<MeasureBloc, MeasureState>(
+      listener: (context, state) {
+        if (state is MeasureCreationError) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+        if (state is MeasureCreated) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        bottomNavigationBar: const NavBar(current: NavItem.measure),
+        body: BlocBuilder<MeasureBloc, MeasureState>(
+            builder: (context, state) {
+              final isLoading = state is MeasureCreationLoading;
+              return SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/logo-vert.png',
+                        height: 70,
+                      ),
+                      const SizedBox(height: 40),
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: AppColors.lightGrey,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppColors.forestGreen),
+                        ),
+                        child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Relevé des Pontes",
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 170,
+                                  height: 1,
+                                  color: AppColors.forestGreen,
+                                ),
+                                const SizedBox(height: 32),
+                                MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
+                                MeasureTextField(label: "Lieu", controller: _locationController,),
+                                MeasureTextField(label: "Nombre de pontes", controller: _numberController,),
+                                const SizedBox(height: 24),
+                                Column(
+                                  children: [
+                                    MeasureActionButton(
+                                      title: "Photo",
+                                      onTap: () {
+                                        //
+                                      },
+                                    ),
+                                    const SizedBox(height: 12),
+                                    MeasureActionButton(
+                                      title: isLoading ? "Chargement..." : "Valider",
+                                      onTap: isLoading ? null : () {
+                                        if (!_formKey.currentState!.validate()) {
+                                          return;
+                                        }
+                                        context.read<MeasureBloc>().add(
+                                          CreateEggsLayingRequest(
+                                            date: _selectedDate!,
+                                            location: _locationController.text.trim(),
+                                            number: int.parse(_numberController.text.trim()))
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      const InfoTextSection(
+                        title: "Informations sur l'indicateur",
+                        paragraph: indicatorInfo,
+                      ),
+                      const SizedBox(height: 32),
+                      const InfoTextSection(
+                        title: "Tutoriel",
+                        paragraph: tutorial,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        )
       ),
     );
   }

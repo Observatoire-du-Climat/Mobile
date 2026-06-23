@@ -19,4 +19,7 @@ class MeasureRepository {
 
   Future createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event) =>
       measureProvider.createBirdMigration(date, location, specie, event);
+
+  Future createEggsLaying(DateTime date, String location, int number) =>
+      measureProvider.createEggsLaying(date, location, number);
 }

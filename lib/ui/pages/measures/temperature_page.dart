@@ -44,12 +44,6 @@ class _TemperaturePageState extends State<TemperaturePage> {
   final _degreeController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    //load the measures
-  }
-
-  @override
   void dispose() {
     _dateController.dispose();
     _locationController.dispose();

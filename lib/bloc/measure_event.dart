@@ -46,5 +46,16 @@ class CreateBirdMigrationRequest extends MeasureEvent {
     required this.specie,
     required this.event
   });
+}
 
+class CreateEggsLayingRequest extends MeasureEvent {
+  final DateTime date;
+  final String location;
+  final int number;
+
+  CreateEggsLayingRequest({
+    required this.date,
+    required this.location,
+    required this.number
+  });
 }
