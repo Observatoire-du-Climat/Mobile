@@ -1,5 +1,7 @@
 import 'package:mobile/models/measure.dart';
 
+import 'enum/measure_type.dart';
+
 class EggsLaying extends Measure{
 
   final int number;
@@ -22,7 +24,7 @@ class EggsLaying extends Measure{
           id: id,
           date: DateTime.parse(date),
           location: location,
-          type: type,
+          type: MeasureType.values.byName(type.toLowerCase()),
           number: number,
       ),
       _ => throw const FormatException('Failed to load EggsLaying measure')

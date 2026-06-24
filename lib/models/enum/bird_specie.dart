@@ -1,4 +1,8 @@
 enum BirdSpecie {
-  swallow,
-  swift,
+  swallow('Hirondelles'),
+  swift('Martinets');
+
+  final String label;
+  const BirdSpecie(this.label);
 }
+

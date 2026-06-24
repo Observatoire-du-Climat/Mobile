@@ -43,7 +43,30 @@ class MeasureProvider {
     }
   }
 
-  //get one measure in details
+  Future getSingleMeasure(int id) async {
+
+    final response = await http.get(Uri.parse('$apiUrl/measures/$id'));
+    print('response code :  ${response.statusCode}');
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> body = jsonDecode(response.body) as Map<String, dynamic>;
+      switch (body['type'] as String) {
+        case 'TEMPERATURE':
+          return Temperature.fromJson(body);
+        case 'SNOW_HEIGHT':
+          return SnowHeight.fromJson(body);
+        case 'BIRD_MIGRATION':
+          return BirdMigration.fromJson(body);
+        case 'EGGS_LAYING':
+          return EggsLaying.fromJson(body);
+        default:
+          throw Exception('Unknown measure type: ${body['type']}');
+      }
+    }else {
+      throw Exception('Failed to fetch measure');
+    }
+  }
 
   Future<Temperature> createTemperature(DateTime date, String location, int degree) async {
     try {

@@ -59,3 +59,12 @@ class CreateEggsLayingRequest extends MeasureEvent {
     required this.number
   });
 }
+
+
+class MeasureDetailsRequest extends MeasureEvent {
+  final int measureId;
+
+  MeasureDetailsRequest({
+    required this.measureId
+  });
+}

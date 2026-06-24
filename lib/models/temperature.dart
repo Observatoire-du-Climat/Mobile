@@ -1,5 +1,7 @@
 import 'package:mobile/models/measure.dart';
 
+import 'enum/measure_type.dart';
+
 class Temperature extends Measure {
 
   final int degree;
@@ -18,7 +20,7 @@ class Temperature extends Measure {
           id: id,
           date: DateTime.parse(date),
           location: location,
-          type: type,
+          type: MeasureType.values.byName(type.toLowerCase()),
           degree : degree
       ),
       _ => throw const FormatException('Failed to load Temperature measure')

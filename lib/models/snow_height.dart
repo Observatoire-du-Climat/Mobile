@@ -1,6 +1,8 @@
 import 'package:mobile/models/enum/weather_type.dart';
 import 'package:mobile/models/measure.dart';
 
+import 'enum/measure_type.dart';
+
 class SnowHeight extends Measure{
 
   final int height;
@@ -29,7 +31,7 @@ class SnowHeight extends Measure{
           id: id,
           date: DateTime.parse(date),
           location: location,
-          type: type,
+          type: MeasureType.values.byName(type.toLowerCase()),
           height: height,
           weather: WeatherType.values.byName(weather.toLowerCase()),
           precipitation: precipitation

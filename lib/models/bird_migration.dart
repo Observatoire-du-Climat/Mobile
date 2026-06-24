@@ -2,6 +2,8 @@ import 'package:mobile/models/enum/bird_event_type.dart';
 import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/measure.dart';
 
+import 'enum/measure_type.dart';
+
 class BirdMigration extends Measure {
   final BirdSpecie specie;
   final BirdEventType event;
@@ -26,7 +28,7 @@ class BirdMigration extends Measure {
           id: id,
           date: DateTime.parse(date),
           location: location,
-          type: type,
+          type: MeasureType.values.byName(type.toLowerCase()),
           specie: BirdSpecie.values.byName(weather.toLowerCase()),
           event: BirdEventType.values.byName(event.toLowerCase())
       ),

@@ -11,6 +11,8 @@ class MeasureRepository {
 
   Future getUserMeasures() => measureProvider.getUserMeasures();
 
+  Future getSingleMeasure(int id) => measureProvider.getSingleMeasure(id);
+
   Future createTemperature(DateTime date, String location, int degree) =>
       measureProvider.createTemperature(date, location, degree);
 

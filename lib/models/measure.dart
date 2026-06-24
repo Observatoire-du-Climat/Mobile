@@ -1,8 +1,10 @@
+import 'package:mobile/models/enum/measure_type.dart';
+
 class Measure {
   final int id;
   final DateTime date;
   final String location;
-  final String type;
+  final MeasureType type;
 
   Measure({
     required this.id,
@@ -17,19 +19,9 @@ class Measure {
         id: id,
         date: DateTime.parse(date),
         location: location,
-        type: type
+        type: MeasureType.values.byName(type.toLowerCase())
       ),
       _ => throw const FormatException('Failed to load Measure')
     };
-  }
-
-  String typeToString() {
-    switch (type) {
-      case "TEMPERATURE" : return "Température";
-      case "SNOW_HEIGHT" : return "Hauteur des Neiges";
-      case "BIRD_MIGRATION" : return "Migrations des oiseaux";
-      case "EGGS_LAYING" : return "Relevé des pontes";
-      default: return "";
-    }
   }
 }
