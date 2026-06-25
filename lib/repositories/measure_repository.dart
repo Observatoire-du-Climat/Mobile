@@ -24,4 +24,9 @@ class MeasureRepository {
 
   Future createEggsLaying(DateTime date, String location, int number) =>
       measureProvider.createEggsLaying(date, location, number);
+
+  Future updateTemperature(int measureId, DateTime date, String location, int degree) =>
+      measureProvider.updateTemperature(measureId, date, location, degree);
+
+  Future deleteMeasure(int measureId) => measureProvider.deleteMeasure(measureId);
 }

@@ -72,16 +72,26 @@ class _HistoryPageState extends State<HistoryPage> {
                           color: AppColors.forestGreen,
                         ),
                         const SizedBox(height: 28),
-                        if (state is MeasuresLoading) const Text("Chargement..."),
-                        if (state is MeasuresFetchedEmpty) const Text("Aucune mesure"),
-                        if (state is MeasuresFetched)
                         Expanded(
-                          child: ListView.separated(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            itemCount: state.measures.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: 15),
-                            itemBuilder: (context, index) {
-                              return HistoryCard(item: state.measures[index]);
+                          child: Builder(
+                            builder: (context) {
+                              if (state is MeasuresLoading) {
+                                return const Center(child: Text("Chargement..."));
+                              }
+                              if (state is MeasuresFetchedEmpty) {
+                                return const Center(child: Text("Aucune mesure"));
+                              }
+                              if (state is MeasuresFetched) {
+                                return ListView.separated(
+                                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                                  itemCount: state.measures.length,
+                                  separatorBuilder: (_, _) => const SizedBox(height: 15),
+                                  itemBuilder: (context, index) {
+                                    return HistoryCard(item: state.measures[index]);
+                                  },
+                                );
+                              }
+                              return const SizedBox.shrink();
                             },
                           ),
                         ),

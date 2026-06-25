@@ -74,3 +74,23 @@ class MeasureDetailsError extends MeasureState {
   MeasureDetailsError(this.message);
 }
 
+
+class MeasureUpdateLoading extends MeasureState {}
+
+class MeasureUpdated extends MeasureState {}
+
+class MeasureUpdateError extends MeasureState {
+  final String message;
+
+  MeasureUpdateError(this.message);
+}
+
+class MeasureDeleteLoading extends MeasureState {}
+
+class MeasureDeleted extends MeasureState {}
+
+class MeasureDeleteError extends MeasureState {
+  final String message;
+
+  MeasureDeleteError(this.message);
+}

@@ -68,3 +68,25 @@ class MeasureDetailsRequest extends MeasureEvent {
     required this.measureId
   });
 }
+
+class UpdateTemperatureRequest extends MeasureEvent {
+  final int measureId;
+  final DateTime date;
+  final String location;
+  final int degree;
+
+  UpdateTemperatureRequest({
+    required this.measureId,
+    required this.date,
+    required this.location,
+    required this.degree
+  });
+}
+
+class DeleteMeasureRequest extends MeasureEvent {
+  final int measureId;
+
+  DeleteMeasureRequest({
+    required this.measureId
+  });
+}

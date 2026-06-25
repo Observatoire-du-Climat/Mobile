@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile/models/enum/measure_type.dart';
-import 'package:mobile/models/temperature.dart';
-import 'package:mobile/ui/pages/history_card/bird_migration_details.dart';
-import 'package:mobile/ui/pages/history_card/eggs_laying_details.dart';
-import 'package:mobile/ui/pages/history_card/snow_height_details.dart';
-import 'package:mobile/ui/pages/history_card/temperature_details.dart';
 
 import '../../../app_theme.dart';
 import '../../../models/measure.dart';
@@ -19,16 +13,6 @@ class HistoryCard extends StatelessWidget {
     super.key,
     required this.item,
   });
-  /*
-  getCorrectCard() {
-    switch (item.type) {
-      case MeasureType.temperature : return TemperatureDetails(itemId: item.id);
-      case MeasureType.snowHeight : return SnowHeightDetails(itemId: item.id);
-      case MeasureType.birdMigration : return BirdMigrationDetails(itemId: item.id);
-      case MeasureType.eggsLaying : return EggsLayingDetails(itemId: item.id);
-    }
-  }
-   */
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +50,19 @@ class HistoryCard extends StatelessWidget {
           MeasureActionButton(
             title: "Détails",
             onTap: () {
+              //context.read<MeasureBloc>().add(MeasureDetailsRequest(measureId: item.id));
+              Navigator.pushNamed(context, '/measure-details', arguments: item.id);
+              /*
               showDialog(
                 context: context,
                 barrierColor: Colors.black.withOpacity(0.5),
-                builder: (_) => TemperatureDetails(item: item as Temperature), ///TODO modify
+                builder: (_) => BlocProvider.value(
+                  value: context.read<MeasureBloc>(),
+                  child: MeasureDetails(),
+                )
               );
+
+               */
             },
           ),
         ],
@@ -79,10 +71,3 @@ class HistoryCard extends StatelessWidget {
   }
 }
 
-
-
-abstract class MeasureDetails extends StatelessWidget {
-  const MeasureDetails({
-    super.key,
-  });
-}

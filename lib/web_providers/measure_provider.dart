@@ -207,5 +207,56 @@ class MeasureProvider {
     }
   }
 
+  Future<Temperature> updateTemperature(int measureId, DateTime date, String location, int degree) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final response = await http.put(
+          Uri.parse('$apiUrl/measures/temperature/$measureId'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'userId': userId,
+            'date': dateFormat.format(date),
+            'location': location,
+            'degree': degree
+          })
+      ).timeout(Duration(seconds: 10));
+
+      print('response code : ${response.statusCode}');
+      print(response);
+
+      if (response.statusCode == 200) {
+        final temperature = Temperature.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return temperature;
+      } else {
+        throw Exception('Failed to update Temperature measure');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<void> deleteMeasure(int measureId) async {
+    try {
+      final response = await http.delete(
+          Uri.parse('$apiUrl/measures/$measureId')
+      ).timeout(Duration(seconds: 10));
+
+      print('response code : ${response.statusCode}');
+      print(response);
+
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete Temperature measure');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
 
 }

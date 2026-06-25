@@ -20,6 +20,8 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     on<CreateBirdMigrationRequest>(_onCreateBirdMigrationRequest);
     on<CreateEggsLayingRequest>(_onCreateEggsLayingRequest);
     on<MeasureDetailsRequest>(_onMeasureDetailsRequest);
+    on<UpdateTemperatureRequest>(_onUpdateTemperatureRequest);
+    on<DeleteMeasureRequest>(_onDeleteMeasureRequest);
   }
 
   Future<void> _onUserMeasureRequest(UserMeasureRequest request, Emitter<MeasureState> emit) async {
@@ -99,11 +101,11 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       switch (measure.type) {
         case MeasureType.temperature :
           emit(TemperatureDetailsFetched(measure as Temperature));
-        case MeasureType.snowHeight :
+        case MeasureType.snow_height :
           emit(SnowHeightDetailsFetched(measure as SnowHeight));
-        case MeasureType.birdMigration :
+        case MeasureType.bird_migration :
           emit(BirdMigrationDetailsFetched(measure as BirdMigration));
-        case MeasureType.eggsLaying :
+        case MeasureType.eggs_laying :
           emit(EggsLayingDetailsFetched(measure as EggsLaying));
       }
     } catch (e) {
@@ -112,4 +114,27 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  Future<void> _onUpdateTemperatureRequest(UpdateTemperatureRequest request, Emitter<MeasureState> emit) async {
+    emit(MeasureUpdateLoading());
+
+    try {
+      await _measureRepository.updateTemperature(request.measureId, request.date, request.location, request.degree);
+      emit(MeasureUpdated());
+    } catch (e) {
+      print('Error : $e');
+      emit (MeasureUpdateError('Failed to update Temperature Measure'));
+    }
+  }
+
+  Future<void> _onDeleteMeasureRequest(DeleteMeasureRequest request, Emitter<MeasureState> emit) async {
+    emit(MeasureDeleteLoading());
+
+    try {
+      await _measureRepository.deleteMeasure(request.measureId);
+      emit(MeasureDeleted());
+    } catch (e) {
+      print('Error : $e');
+      emit(MeasureDeleteError('Failed to delete measure'));
+    }
+  }
 }

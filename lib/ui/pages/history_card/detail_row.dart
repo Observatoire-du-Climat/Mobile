@@ -18,7 +18,7 @@ class DetailRow extends StatelessWidget{
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 70,
+            width: 100,
             child: Text(
               "$label :",
               style: Theme.of(context).textTheme.bodyMedium,
