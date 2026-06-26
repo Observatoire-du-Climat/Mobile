@@ -14,5 +14,9 @@ class SecureStorage {
     return id;
   }
 
+  Future<void> deleteUserId() async {
+    await _storage.delete(key: 'userId');
+  }
+
   //ajout de token plus tard
 }

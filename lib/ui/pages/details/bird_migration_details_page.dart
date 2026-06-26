@@ -167,6 +167,7 @@ class _BirdMigrationDetailsPageState extends State<BirdMigrationDetailsPage> {
                         const SizedBox(height: 12),
                         MeasureActionButton(
                           title: "Supprimer",
+                          borderColor: Colors.red,
                           onTap: () {
                             context.read<MeasureBloc>().add(
                                 DeleteMeasureRequest(measureId: widget.measure.id)

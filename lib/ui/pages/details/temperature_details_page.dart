@@ -149,6 +149,7 @@ class _TemperatureDetailsPageState extends State<TemperatureDetailsPage> {
                         const SizedBox(height: 12),
                         MeasureActionButton(
                           title: "Supprimer",
+                          borderColor: Colors.red,
                           onTap: () {
                             context.read<MeasureBloc>().add(
                                 DeleteMeasureRequest(measureId: widget.measure.id)

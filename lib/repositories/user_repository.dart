@@ -12,4 +12,6 @@ class UserRepository {
 
   Future loginUser(String email, String password) => userProvider.loginUser(email, password);
 
+  Future logout() => userProvider.logout();
+
 }

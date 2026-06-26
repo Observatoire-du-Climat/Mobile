@@ -21,3 +21,7 @@ class LoginRequest extends UserEvent {
     required this.password
   });
 }
+
+class UserRequest extends UserEvent {}
+
+class LogoutRequest extends UserEvent {}

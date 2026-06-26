@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/bloc/user_bloc.dart';
+import 'package:mobile/bloc/user_event.dart';
+import 'package:mobile/bloc/user_state.dart';
 import 'package:mobile/ui/widgets/large_action_button.dart';
 
 import '../../app_theme.dart';
@@ -9,46 +13,88 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      bottomNavigationBar: const NavBar(current: NavItem.profile),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            top: 150,
-            child: Opacity(
-              opacity: 0.5,
-              child: Image.asset(
-                'assets/images/fond_version_clean.png',
-                fit: BoxFit.cover,
+    return BlocListener<UserBloc, UserState>(
+      listener: (context, state) {
+        if (state is UserDisconnected) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
+
+        if (state is UserError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        bottomNavigationBar: const NavBar(current: NavItem.profile),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              top: 150,
+              child: Opacity(
+                opacity: 0.5,
+                child: Image.asset(
+                  'assets/images/fond_version_clean.png',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  Image.asset(
-                    'assets/images/logo-vert.png',
-                    height: 70,
-                  ),
-                  const SizedBox(height: 40),
-                  const ProfileCard(),
-                  const SizedBox(height: 40),
-                  const SettingsCard(),
-                ],
+            SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/logo-vert.png',
+                      height: 70,
+                    ),
+                    const SizedBox(height: 40),
+
+                    BlocBuilder<UserBloc, UserState>(
+                      builder: (context, state) {
+                        if (state is UserLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+
+                        if (state is UserConnected) {
+                          return ProfileCard(
+                            name: state.name,
+                            email: state.email,
+                          );
+                        }
+
+                        return const ProfileSection(
+                          title: "Profil",
+                          child: Text("Aucun utilisateur connecté"),
+                        );
+                      },
+                    ),
+
+                    const SizedBox(height: 40),
+                    const SettingsCard(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key});
+  final String name;
+  final String email;
+
+  const ProfileCard({
+    super.key,
+    required this.name,
+    required this.email,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +103,7 @@ class ProfileCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "David Berger",
+            name,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
               color: Colors.black,
               fontWeight: FontWeight.w700,
@@ -65,7 +111,7 @@ class ProfileCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            "david.berger@heig-vd.ch",
+            email,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
@@ -85,8 +131,7 @@ class ProfileCard extends StatelessWidget {
           LargeActionButton(
             title: "Déconnexion",
             onTap: () {
-              Navigator.pushReplacementNamed(
-                  context, '/home');
+              context.read<UserBloc>().add(LogoutRequest());
             },
           ),
         ],

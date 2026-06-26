@@ -181,6 +181,7 @@ class _SnowHeightDetailsPageState extends State<SnowHeightDetailsPage> {
                         const SizedBox(height: 12),
                         MeasureActionButton(
                           title: "Supprimer",
+                          borderColor: Colors.red,
                           onTap: () {
                             context.read<MeasureBloc>().add(
                                 DeleteMeasureRequest(

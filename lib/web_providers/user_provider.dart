@@ -81,4 +81,8 @@ class UserProvider {
     }
   }
 
+  Future<void> logout() async {
+    await storage.deleteUserId();
+  }
+
 }
