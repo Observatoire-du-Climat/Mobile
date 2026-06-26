@@ -28,5 +28,14 @@ class MeasureRepository {
   Future updateTemperature(int measureId, DateTime date, String location, int degree) =>
       measureProvider.updateTemperature(measureId, date, location, degree);
 
+  Future updateSnowHeight(int measureId, DateTime date, String location, int height, WeatherType weather, int precipitation) =>
+    measureProvider.updateSnowHeight(measureId, date, location, height, weather, precipitation);
+
+  Future updateBirdMigration(int measureId, DateTime date, String location, BirdSpecie specie, BirdEventType event) =>
+    measureProvider.updateBirdMigration(measureId, date, location, specie, event);
+
+  Future updateEggsLaying(int measureId, DateTime date, String location, int number) =>
+    measureProvider.updateEggsLaying(measureId, date, location, number);
+
   Future deleteMeasure(int measureId) => measureProvider.deleteMeasure(measureId);
 }

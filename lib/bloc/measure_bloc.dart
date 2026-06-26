@@ -21,6 +21,9 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     on<CreateEggsLayingRequest>(_onCreateEggsLayingRequest);
     on<MeasureDetailsRequest>(_onMeasureDetailsRequest);
     on<UpdateTemperatureRequest>(_onUpdateTemperatureRequest);
+    on<UpdateSnowHeightRequest>(_onUpdateSnowHeightRequest);
+    on<UpdateBirdMigrationRequest>(_onUpdateBirdMigrationRequest);
+    on<UpdateEggsLayingRequest>(_onUpdateEggsLaying);
     on<DeleteMeasureRequest>(_onDeleteMeasureRequest);
   }
 
@@ -123,6 +126,42 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     } catch (e) {
       print('Error : $e');
       emit (MeasureUpdateError('Failed to update Temperature Measure'));
+    }
+  }
+
+  Future<void> _onUpdateSnowHeightRequest(UpdateSnowHeightRequest request, Emitter<MeasureState> emit) async {
+    emit(MeasureUpdateLoading());
+
+    try {
+      await _measureRepository.updateSnowHeight(request.measureId, request.date, request.location, request.height, request.weather, request.precipitation);
+      emit(MeasureUpdated());
+    } catch (e) {
+      print('Error : $e');
+      emit(MeasureUpdateError('Failed to update SnowHeight Measure'));
+    }
+  }
+
+  Future<void> _onUpdateBirdMigrationRequest(UpdateBirdMigrationRequest request, Emitter<MeasureState> emit) async {
+    emit(MeasureUpdateLoading());
+
+    try {
+      await _measureRepository.updateBirdMigration(request.measureId, request.date, request.location, request.specie, request.event);
+      emit(MeasureUpdated());
+    } catch (e) {
+      print('Error : $e');
+      emit(MeasureUpdateError('Failed to update BirdMigration measure'));
+    }
+  }
+
+  Future<void> _onUpdateEggsLaying(UpdateEggsLayingRequest request, Emitter<MeasureState> emit) async {
+    emit(MeasureUpdateLoading());
+
+    try {
+      await _measureRepository.updateEggsLaying(request.measureId, request.date, request.location, request.number);
+      emit(MeasureUpdated());
+    } catch (e) {
+      print('Error : $e');
+      emit(MeasureUpdateError('Failed to update EggsLaying measure'));
     }
   }
 

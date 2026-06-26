@@ -8,7 +8,7 @@ import 'package:mobile/bloc/user_bloc.dart';
 import 'package:mobile/repositories/measure_repository.dart';
 import 'package:mobile/repositories/user_repository.dart';
 import 'package:mobile/secure_storage.dart';
-import 'package:mobile/ui/pages/history_card/temperature_details_page.dart';
+import 'package:mobile/ui/pages/details/measure_details_page.dart';
 import 'package:mobile/ui/pages/history_page.dart';
 import 'package:mobile/ui/pages/home_page.dart';
 import 'package:mobile/ui/pages/login_page.dart';
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
             '/login' : (context) => const LoginPage(),
             '/register' : (context) => const RegisterPage(),
             '/home' : (context) => const HomePage(),
-            '/measure-details' : (context) => const TemperatureDetailsPage()
+            '/measure-details' : (context) => const MeasureDetailsPage()
           },
           home: Scaffold(
               body: StartPage()

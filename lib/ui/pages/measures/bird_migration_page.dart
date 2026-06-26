@@ -6,18 +6,15 @@ import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/bloc/measure_state.dart';
 import 'package:mobile/models/enum/bird_event_type.dart';
 import 'package:mobile/models/enum/bird_specie.dart';
+import 'package:mobile/ui/widgets/measure_input/event_dropdown.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
+import 'package:mobile/ui/widgets/measure_input/specie_dropdown.dart';
 
 import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
-
-enum MigrationType {
-  arrival,
-  departure,
-}
 
 class BirdMigrationPage extends StatefulWidget {
   const BirdMigrationPage({super.key});
@@ -149,7 +146,7 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
                                   const SizedBox(height: 32),
                                   MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate),
                                   MeasureTextField(label: "Lieu", controller: _locationController,),
-                                  _SpecieDropDown(
+                                  SpecieDropdown(
                                       selected: _specie,
                                       onChanged: (value) {
                                         if (value == null) return;
@@ -158,7 +155,7 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
                                           _specie = value;
                                         });
                                       }),
-                                  _EventDropDown(
+                                  EventDropdown(
                                       selected: _eventType,
                                       onChanged: (value) {
                                         if (value == null) return;
@@ -205,120 +202,6 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
               }
           )
         )
-    );
-  }
-}
-
-class _SpecieDropDown extends StatelessWidget {
-  final BirdSpecie selected;
-  final ValueChanged<BirdSpecie?> onChanged;
-
-  const _SpecieDropDown({
-    required this.selected,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 145,
-            child: Text(
-              "Espèce :",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 40,
-              child: DropdownButtonFormField<BirdSpecie>(
-                value: selected,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.white,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: BirdSpecie.swallow,
-                    child: Text("Hirondelles"),
-                  ),
-                  DropdownMenuItem(
-                    value: BirdSpecie.swift,
-                    child: Text("Martinets"),
-                  ),
-                ],
-                onChanged: onChanged,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _EventDropDown extends StatelessWidget {
-  final BirdEventType selected;
-  final ValueChanged<BirdEventType?> onChanged;
-
-  const _EventDropDown({
-    required this.selected,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 145,
-            child: Text(
-              "Arrivée/Départ :",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 40,
-              child: DropdownButtonFormField<BirdEventType>(
-                value: selected,
-                isExpanded: true,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.white,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: BirdEventType.arrival,
-                    child: Text("Arrivée"),
-                  ),
-                  DropdownMenuItem(
-                    value: BirdEventType.departure,
-                    child: Text("Départ"),
-                  ),
-                ],
-                onChanged: onChanged,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/measure_bloc.dart';
 import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/bloc/measure_state.dart';
-import 'package:mobile/ui/pages/history_card/history_card.dart';
 
 import '../../app_theme.dart';
+import '../widgets/history_card.dart';
 import '../widgets/nav_bar.dart';
 
 class HistoryPage extends StatefulWidget {

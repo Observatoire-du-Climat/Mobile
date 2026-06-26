@@ -83,6 +83,54 @@ class UpdateTemperatureRequest extends MeasureEvent {
   });
 }
 
+class UpdateSnowHeightRequest extends MeasureEvent {
+  final int measureId;
+  final DateTime date;
+  final String location;
+  final int height;
+  final WeatherType weather;
+  final int precipitation;
+
+  UpdateSnowHeightRequest({
+    required this.measureId,
+    required this.date,
+    required this.location,
+    required this.height,
+    required this.weather,
+    required this.precipitation
+  });
+}
+
+class UpdateBirdMigrationRequest extends MeasureEvent {
+  final int measureId;
+  final DateTime date;
+  final String location;
+  final BirdSpecie specie;
+  final BirdEventType event;
+
+  UpdateBirdMigrationRequest({
+    required this.measureId,
+    required this.date,
+    required this.location,
+    required this.specie,
+    required this.event
+  });
+}
+
+class UpdateEggsLayingRequest extends MeasureEvent {
+  final int measureId;
+  final DateTime date;
+  final String location;
+  final int number;
+
+  UpdateEggsLayingRequest({
+    required this.measureId,
+    required this.date,
+    required this.location,
+    required this.number
+  });
+}
+
 class DeleteMeasureRequest extends MeasureEvent {
   final int measureId;
 

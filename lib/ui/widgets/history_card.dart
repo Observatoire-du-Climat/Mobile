@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../app_theme.dart';
-import '../../../models/measure.dart';
-import '../../widgets/measure_action_button.dart';
+import '../../app_theme.dart';
+import '../../models/measure.dart';
+import 'measure_action_button.dart';
 
 class HistoryCard extends StatelessWidget {
 
@@ -52,17 +52,6 @@ class HistoryCard extends StatelessWidget {
             onTap: () {
               //context.read<MeasureBloc>().add(MeasureDetailsRequest(measureId: item.id));
               Navigator.pushNamed(context, '/measure-details', arguments: item.id);
-              /*
-              showDialog(
-                context: context,
-                barrierColor: Colors.black.withOpacity(0.5),
-                builder: (_) => BlocProvider.value(
-                  value: context.read<MeasureBloc>(),
-                  child: MeasureDetails(),
-                )
-              );
-
-               */
             },
           ),
         ],

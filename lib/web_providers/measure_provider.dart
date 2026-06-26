@@ -241,6 +241,111 @@ class MeasureProvider {
     }
   }
 
+  Future<SnowHeight> updateSnowHeight(int measureId, DateTime date, String location, int height, WeatherType weather, int precipitation) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final response = await http.put(
+          Uri.parse('$apiUrl/measures/snow-height/$measureId'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'userId': userId,
+            'date': dateFormat.format(date),
+            'location': location,
+            'height': height,
+            'weather': weather.name,
+            'precipitation': precipitation
+          })
+      ).timeout(Duration(seconds: 10));
+
+      print('response code : ${response.statusCode}');
+      print(response);
+
+      if (response.statusCode == 200) {
+        final snowHeight = SnowHeight.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return snowHeight;
+      } else {
+        throw Exception('Failed to update SnowHeight measure');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<BirdMigration> updateBirdMigration(int measureId, DateTime date, String location, BirdSpecie specie, BirdEventType event) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final response = await http.put(
+          Uri.parse('$apiUrl/measures/bird-migration/$measureId'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'userId': userId,
+            'date': dateFormat.format(date),
+            'location': location,
+            'specie': specie.name,
+            'event': event.name,
+          })
+      ).timeout(Duration(seconds: 10));
+
+      print('response code : ${response.statusCode}');
+      print(response);
+
+      if (response.statusCode == 200) {
+        final birdMigration = BirdMigration.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return birdMigration;
+      } else {
+        throw Exception('Failed to update BirdMigration measure');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<EggsLaying> updateEggsLaying(int measureId, DateTime date, String location, int number) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final response = await http.put(
+          Uri.parse('$apiUrl/measures/eggs-laying/$measureId'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'userId': userId,
+            'date': dateFormat.format(date),
+            'location': location,
+            'number': number
+          })
+      ).timeout(Duration(seconds: 10));
+
+      print('response code : ${response.statusCode}');
+      print(response);
+
+      if (response.statusCode == 200) {
+        final eggsLaying = EggsLaying.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return eggsLaying;
+      } else {
+        throw Exception('Failed to update EggsLaying measure');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
   Future<void> deleteMeasure(int measureId) async {
     try {
       final response = await http.delete(
