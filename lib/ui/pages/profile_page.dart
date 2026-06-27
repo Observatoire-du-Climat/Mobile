@@ -70,6 +70,7 @@ class ProfilePage extends StatelessWidget {
                           title: "Profil",
                           child: Text("Aucun utilisateur connecté"),
                         );
+
                       },
                     ),
 
@@ -124,7 +125,7 @@ class ProfileCard extends StatelessWidget {
           LargeActionButton(
             title: "Modifier",
             onTap: () {
-              //
+              Navigator.pushNamed(context, '/profile-update');
             },
           ),
           const SizedBox(height: 8),

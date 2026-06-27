@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/user_bloc.dart';
 import 'package:mobile/bloc/user_event.dart';
 import 'package:mobile/bloc/user_state.dart';
+import 'package:mobile/ui/widgets/user_input.dart';
 
 import '../../app_theme.dart';
 import '../widgets/large_action_button.dart';
@@ -114,15 +115,16 @@ class _LoginPageState extends State<LoginPage> {
 
                                     const SizedBox(height: 30),
 
-                                    _buildInput(
+                                    UserInput(
                                         label: "Adresse email",
                                         obscure: false,
-                                        controller: _emailController
+                                        controller: _emailController,
+                                        keyboardType: TextInputType.emailAddress,
                                     ),
 
                                     const SizedBox(height: 20),
 
-                                    _buildInput(
+                                    UserInput(
                                         label: "Mot de passe",
                                         obscure: true,
                                         controller: _passwordController
@@ -165,43 +167,6 @@ class _LoginPageState extends State<LoginPage> {
               },
           )
         )
-    );
-
-
-  }
-
-  Widget _buildInput({
-    required String label,
-    required bool obscure,
-    required TextEditingController controller,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 36,
-          child: TextFormField(
-            controller: controller,
-            obscureText: obscure,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Champ obligatoire';
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding: EdgeInsets.symmetric(horizontal: 8),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

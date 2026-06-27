@@ -18,6 +18,7 @@ import 'package:mobile/ui/pages/measures/eggs_laying_page.dart';
 import 'package:mobile/ui/pages/measures/snow_height_page.dart';
 import 'package:mobile/ui/pages/measures/temperature_page.dart';
 import 'package:mobile/ui/pages/profile_page.dart';
+import 'package:mobile/ui/pages/profile_update_page.dart';
 import 'package:mobile/ui/pages/register_page.dart';
 import 'package:mobile/web_providers/measure_provider.dart';
 import 'package:mobile/web_providers/user_provider.dart';
@@ -76,7 +77,8 @@ class MyApp extends StatelessWidget {
             '/login' : (context) => const LoginPage(),
             '/register' : (context) => const RegisterPage(),
             '/home' : (context) => const HomePage(),
-            '/measure-details' : (context) => const MeasureDetailsPage()
+            '/measure-details' : (context) => const MeasureDetailsPage(),
+            '/profile-update' : (context) => const ProfileUpdatePage()
           },
           home: Scaffold(
               body: StartPage()

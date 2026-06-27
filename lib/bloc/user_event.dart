@@ -25,3 +25,15 @@ class LoginRequest extends UserEvent {
 class UserRequest extends UserEvent {}
 
 class LogoutRequest extends UserEvent {}
+
+class UserUpdateRequest extends UserEvent {
+  final String name;
+  final String email;
+  final String password;
+
+  UserUpdateRequest({
+    required this.name,
+    required this.email,
+    required this.password
+  });
+}

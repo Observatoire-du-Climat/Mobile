@@ -21,3 +21,5 @@ class UserError extends UserState {
 }
 
 class UserDisconnected extends UserState {}
+
+class UserUpdated extends UserState {}

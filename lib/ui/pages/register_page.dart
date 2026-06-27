@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/user_bloc.dart';
 import 'package:mobile/bloc/user_event.dart';
 import 'package:mobile/bloc/user_state.dart';
+import 'package:mobile/ui/widgets/user_input.dart';
 
 import '../../app_theme.dart';
 import '../widgets/large_action_button.dart';
@@ -110,19 +111,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                     color: AppColors.forestGreen,
                                   ),
                                   const SizedBox(height: 30),
-                                  AuthInput(
+                                  UserInput(
                                       label: "Nom Prénom",
                                       controller: _nameController),
                                   const SizedBox(height: 20),
-                                  AuthInput(
+                                  UserInput(
                                     label: "Adresse email",
                                     keyboardType: TextInputType.emailAddress,
                                     controller: _emailController,
                                   ),
                                   const SizedBox(height: 20),
-                                  AuthInput(
+                                  UserInput(
                                     label: "Mot de passe",
-                                    obscureText: true,
+                                    obscure: true,
                                     controller: _passwordController,
                                   ),
                                   const SizedBox(height: 30),
@@ -160,57 +161,6 @@ class _RegisterPageState extends State<RegisterPage> {
             }
         )
       ),
-    );
-  }
-}
-
-class AuthInput extends StatelessWidget {
-  final String label;
-  final bool obscureText;
-  final TextInputType keyboardType;
-  final TextEditingController controller;
-
-  const AuthInput({
-    super.key,
-    required this.label,
-    required this.controller,
-    this.obscureText = false,
-    this.keyboardType = TextInputType.text,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        const SizedBox(height: 8),
-        SizedBox(
-          height: 36,
-          child: TextFormField(
-            controller: controller,
-            obscureText: obscureText,
-            keyboardType: keyboardType,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Champ obligatoire';
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              filled: true,
-              fillColor: AppColors.white,
-              contentPadding: EdgeInsets.symmetric(horizontal: 8),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

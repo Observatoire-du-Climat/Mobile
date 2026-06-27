@@ -14,4 +14,6 @@ class UserRepository {
 
   Future logout() => userProvider.logout();
 
+  Future updateUser(String name, String email, String password) => userProvider.updateUser(name, email, password);
+
 }
