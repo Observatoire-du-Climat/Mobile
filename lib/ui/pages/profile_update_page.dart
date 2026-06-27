@@ -46,68 +46,82 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
           bottomNavigationBar: const NavBar(current: NavItem.measure),
           body: BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
-
-                return  Container(
-                    padding: const EdgeInsets.all(30),
-                    decoration: BoxDecoration(
-                      color: AppColors.lightGrey,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.forestGreen),
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
+                return SafeArea(
+                    child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
                           children: [
-                            Text(
-                              "Modification du profile",
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 6),
-                            Container(
-                              width: 170,
-                              height: 1,
-                              color: AppColors.forestGreen,
-                            ),
-                            const SizedBox(height: 30),
-                            UserInput(
-                                label: "Nom Prénom",
-                                controller: _nameController),
-                            const SizedBox(height: 20),
-                            UserInput(
-                              label: "Adresse email",
-                              keyboardType: TextInputType.emailAddress,
-                              controller: _emailController,
-                            ),
-                            const SizedBox(height: 20),
-                            UserInput(
-                              label: "Mot de passe",
-                              obscure: true,
-                              controller: _passwordController,
-                            ),
-                            const SizedBox(height: 30),
-                            MeasureActionButton(
-                                title: "Modifier",
-                                onTap: () {
-                                  context.read<UserBloc>().add(
-                                    UserUpdateRequest(
-                                        name: _nameController.text,
-                                        email: _emailController.text,
-                                        password: _passwordController.text)
-                                  );
-                                }
-                            ),
-                            const SizedBox(height: 20),
-                            MeasureActionButton(
-                                title: "Annuler",
-                                onTap: () {
-                                  Navigator.pop(context);
-                                }
-                            )
-                          ]),
-                    )
+                          Image.asset(
+                          'assets/images/logo-vert.png',
+                          height: 70,
+                        ),
+
+                        const SizedBox(height: 40),
+                        Container(
+                          padding: const EdgeInsets.all(30),
+                          decoration: BoxDecoration(
+                            color: AppColors.lightGrey,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.forestGreen),
+                          ),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                                children: [
+                                  Text(
+                                    "Modification du profile",
+                                    style: Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Container(
+                                    width: 170,
+                                    height: 1,
+                                    color: AppColors.forestGreen,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  UserInput(
+                                      label: "Nom Prénom",
+                                      controller: _nameController),
+                                  const SizedBox(height: 20),
+                                  UserInput(
+                                    label: "Adresse email",
+                                    keyboardType: TextInputType.emailAddress,
+                                    controller: _emailController,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  UserInput(
+                                    label: "Mot de passe",
+                                    obscure: true,
+                                    controller: _passwordController,
+                                  ),
+                                  const SizedBox(height: 30),
+                                  MeasureActionButton(
+                                      title: "Modifier",
+                                      onTap: () {
+                                        context.read<UserBloc>().add(
+                                          UserUpdateRequest(
+                                              name: _nameController.text,
+                                              email: _emailController.text,
+                                              password: _passwordController.text)
+                                        );
+                                      }
+                                  ),
+                                  const SizedBox(height: 20),
+                                  MeasureActionButton(
+                                      title: "Annuler",
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      }
+                                  )
+                                ]),
+                          )
+                      )
+                    ])
+                  )
                 );
-              })
+              }
+            )
       )
-    ) ;
+    );
   }
 }

@@ -40,47 +40,48 @@ class _MeasureDetailsPageState extends State<MeasureDetailsPage> {
   Widget build(BuildContext context) {
     return BlocListener<MeasureBloc, MeasureState>(
         listener: (context, state) {
-          if (state is MeasureUpdateError || state is MeasureDeleteError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Error")),
-            );
-          }
           if (state is MeasureUpdated || state is MeasureDeleted) {
-            Navigator.pop(context, true);
+            Navigator.pop(context);
+          }
+          if (state is MeasureUpdateError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+          if (state is MeasureDeleteError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         child: Scaffold(
           backgroundColor: AppColors.white,
           bottomNavigationBar: const NavBar(current: NavItem.history),
           body: BlocBuilder<MeasureBloc, MeasureState>(
-              builder: (context, state) {
+                    builder: (context, state) {
 
-                if (state is MeasureDetailsError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Error")),
-                  );
-                }
+                      if (state is MeasureDetailsError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Error")),
+                        );
+                      }
 
-                if (state is TemperatureDetailsFetched) {
-                  return TemperatureDetailsPage(measure: state.measure);
-                }
+                      if (state is TemperatureDetailsFetched) {
+                        return TemperatureDetailsPage(measure: state.measure);
+                      }
 
-                if (state is SnowHeightDetailsFetched) {
-                  return SnowHeightDetailsPage(measure: state.measure);
-                }
+                      if (state is SnowHeightDetailsFetched) {
+                        return SnowHeightDetailsPage(measure: state.measure);
+                      }
 
-                if (state is BirdMigrationDetailsFetched) {
-                  return BirdMigrationDetailsPage(measure: state.measure);
-                }
+                      if (state is BirdMigrationDetailsFetched) {
+                        return BirdMigrationDetailsPage(measure: state.measure);
+                      }
 
-                if (state is EggsLayingDetailsFetched) {
-                  return EggsLayingDetailsPage(measure: state.measure);
-                }
+                      if (state is EggsLayingDetailsFetched) {
+                        return EggsLayingDetailsPage(measure: state.measure);
+                      }
 
-                return Text('Error');
-              }
-          ),
-        ),
-    );
+                      return const Text('Chargement...');
+                    },
+                  ),
+              )
+          );
   }
 }

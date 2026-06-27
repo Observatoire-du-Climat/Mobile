@@ -7,7 +7,7 @@ import 'package:mobile/bloc/measure_bloc.dart';
 import 'package:mobile/bloc/user_bloc.dart';
 import 'package:mobile/repositories/measure_repository.dart';
 import 'package:mobile/repositories/user_repository.dart';
-import 'package:mobile/secure_storage.dart';
+import 'package:mobile/utils/secure_storage.dart';
 import 'package:mobile/ui/pages/details/measure_details_page.dart';
 import 'package:mobile/ui/pages/history_page.dart';
 import 'package:mobile/ui/pages/home_page.dart';

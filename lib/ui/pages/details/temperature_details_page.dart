@@ -7,6 +7,7 @@ import 'package:mobile/models/temperature.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
 
 import '../../../app_theme.dart';
+import '../../../utils/date_picker_helper.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/measure_input/measure_text_field.dart';
 
@@ -49,34 +50,7 @@ class _TemperatureDetailsPageState extends State<TemperatureDetailsPage> {
   DateTime? _selectedDate;
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.forestGreen,
-              onPrimary: AppColors.white,
-              onSurface: Colors.black,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.forestGreen,
-                textStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
+    final picked = await DatePickerHelper.pickDate(context, initialDate: _selectedDate);
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
@@ -125,7 +99,7 @@ class _TemperatureDetailsPageState extends State<TemperatureDetailsPage> {
 
                     MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
                     MeasureTextField(label: "Lieu", controller: _locationController,),
-                    MeasureTextField(label: "Degré", controller: _degreeController,),
+                    MeasureTextField(label: "Degré", controller: _degreeController, keyboardType: TextInputType.number,),
 
                     const SizedBox(height: 24),
 

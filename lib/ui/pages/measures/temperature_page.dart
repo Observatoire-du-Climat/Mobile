@@ -5,6 +5,7 @@ import 'package:mobile/bloc/measure_bloc.dart';
 import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/bloc/measure_state.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
+import 'package:mobile/utils/date_picker_helper.dart';
 
 import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
@@ -54,34 +55,7 @@ class _TemperaturePageState extends State<TemperaturePage> {
   DateTime? _selectedDate;
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate ?? DateTime.now(),
-        firstDate: DateTime(2020),
-        lastDate: DateTime.now(),
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: const ColorScheme.light(
-                primary: AppColors.forestGreen,
-                onPrimary: AppColors.white,
-                onSurface: Colors.black,
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  foregroundColor: AppColors.forestGreen,
-                  textStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            child: child!,
-          );
-        },
-    );
-
+    final picked = await DatePickerHelper.pickDate(context);
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
@@ -146,7 +120,7 @@ class _TemperaturePageState extends State<TemperaturePage> {
 
                                 MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate),
                                 MeasureTextField(label: "Lieu", controller: _locationController,),
-                                MeasureTextField(label: "Degré", controller: _degreeController,),
+                                MeasureTextField(label: "Degré", controller: _degreeController, keyboardType: TextInputType.number,),
 
                                 const SizedBox(height: 24),
 

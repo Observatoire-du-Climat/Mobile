@@ -11,7 +11,7 @@ import 'package:mobile/models/enum/weather_type.dart';
 import 'package:mobile/models/measure.dart';
 import 'package:mobile/models/snow_height.dart';
 import 'package:mobile/models/temperature.dart';
-import 'package:mobile/secure_storage.dart';
+import 'package:mobile/utils/secure_storage.dart';
 
 
 class MeasureProvider {

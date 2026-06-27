@@ -10,6 +10,7 @@ import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
 import 'package:mobile/ui/widgets/measure_input/weather_dropdown.dart';
 
 import '../../../app_theme.dart';
+import '../../../utils/date_picker_helper.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
@@ -58,34 +59,7 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
   DateTime? _selectedDate;
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.forestGreen,
-              onPrimary: AppColors.white,
-              onSurface: Colors.black,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: AppColors.forestGreen,
-                textStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
+    final picked = await DatePickerHelper.pickDate(context);
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
@@ -150,7 +124,7 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
 
                                 MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
                                 MeasureTextField(label: "Lieu", controller: _locationController,),
-                                MeasureTextField(label: "Hauteur", controller: _heightController,),
+                                MeasureTextField(label: "Hauteur", controller: _heightController, keyboardType: TextInputType.number,),
                                 WeatherDropdown(
                                   selected: _weatherCondition,
                                   onChanged: (value) {
@@ -161,7 +135,7 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
                                     });
                                   },
                                 ),
-                                MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController,),
+                                MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController, keyboardType: TextInputType.number,),
 
 
                                 const SizedBox(height: 24),

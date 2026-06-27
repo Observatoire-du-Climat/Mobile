@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/models/user.dart';
-import 'package:mobile/secure_storage.dart';
+import 'package:mobile/utils/secure_storage.dart';
 
 
 class UserProvider {
