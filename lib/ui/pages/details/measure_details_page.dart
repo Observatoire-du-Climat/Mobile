@@ -41,7 +41,7 @@ class _MeasureDetailsPageState extends State<MeasureDetailsPage> {
     return BlocListener<MeasureBloc, MeasureState>(
         listener: (context, state) {
           if (state is MeasureUpdated || state is MeasureDeleted) {
-            Navigator.pop(context);
+            Navigator.pop(context, true);
           }
           if (state is MeasureUpdateError) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));

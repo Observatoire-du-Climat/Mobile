@@ -29,6 +29,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
 
   Future<void> _onUserMeasureRequest(UserMeasureRequest request, Emitter<MeasureState> emit) async {
     emit(MeasuresLoading());
+    print('UserMeasureRequest asked !!');
 
     try {
       List<Measure> measures = await _measureRepository.getUserMeasures();

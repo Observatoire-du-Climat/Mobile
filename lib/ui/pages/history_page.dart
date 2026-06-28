@@ -91,7 +91,9 @@ class _HistoryPageState extends State<HistoryPage> {
                                   },
                                 );
                               }
-                              return const SizedBox.shrink();
+                              return Center(
+                                child: Text('Etat : ${state.runtimeType}'),
+                              );
                             },
                           ),
                         ),

@@ -52,9 +52,12 @@ class HistoryCard extends StatelessWidget {
           ),
           MeasureActionButton(
             title: "Détails",
-            onTap: () {
-              //context.read<MeasureBloc>().add(MeasureDetailsRequest(measureId: item.id));
-              Navigator.pushNamed(context, '/measure-details', arguments: item.id);
+            onTap: () async {
+              final refresh = await Navigator.pushNamed(context, '/measure-details', arguments: item.id);
+              if (!context.mounted) return;
+              if (refresh == true) {
+                context.read<MeasureBloc>().add(UserMeasureRequest());
+              }
             },
           ),
         ],
