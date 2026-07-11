@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +11,9 @@ import 'package:mobile/models/enum/bird_event_type.dart';
 import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/enum/weather_type.dart';
 import 'package:mobile/models/measure.dart';
+import 'package:mobile/models/request/bird_migration_request.dart';
+import 'package:mobile/models/request/eggs_laying_request.dart';
+import 'package:mobile/models/request/snow_height_request.dart';
 import 'package:mobile/models/request/temperature_request.dart';
 import 'package:mobile/models/snow_height.dart';
 import 'package:mobile/models/temperature.dart';
@@ -114,6 +118,90 @@ class MeasureProvider {
     }
   }
 
+  Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final request = SnowHeightRequest(
+          userId: int.parse(userId),
+          date: date,
+          location: location,
+          height: height,
+          weather: weather,
+          precipitation: precipitation
+      ).toJson();
+
+      final response = await sendMultipart('snow-height', request, null);
+      if (response.statusCode == 201) {
+        final snowHeight = SnowHeight.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return snowHeight;
+      } else {
+        throw Exception('Failed to create SnowHeight measure');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<BirdMigration> createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final request = BirdMigrationRequest(
+          userId: int.parse(userId),
+          date: date,
+          location: location,
+          specie: specie,
+          event: event
+      ).toJson();
+
+      final response = await sendMultipart('bird-migration', request, null);
+      if (response.statusCode == 201) {
+        final birdMigration = BirdMigration.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return birdMigration;
+      } else {
+        throw Exception('Failed to create BirdMigration measure');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<EggsLaying> createEggsLaying(DateTime date, String location, int number) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
+      final request = EggsLayingRequest(
+          userId: int.parse(userId),
+          date: date,
+          location: location,
+          number: number
+      ).toJson();
+
+      final response = await sendMultipart('eggs-laying', request, null);
+      if (response.statusCode == 201) {
+        final eggsLaying = EggsLaying.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return eggsLaying;
+      } else {
+        throw Exception('Failed to create EggsLaying measure');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   /*
   Future<Temperature> createTemperature(DateTime date, String location, int degree) async {
     try {
@@ -148,7 +236,7 @@ class MeasureProvider {
       throw Exception(e);
     }
   }
-   */
+
 
   Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation) async {
     try {
@@ -254,6 +342,7 @@ class MeasureProvider {
       throw Exception(e);
     }
   }
+   */
 
   Future<Temperature> updateTemperature(int measureId, DateTime date, String location, int degree) async {
     try {
