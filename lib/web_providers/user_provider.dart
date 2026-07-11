@@ -10,8 +10,9 @@ class UserProvider {
 
   final apiUrl = dotenv.env['BASE_API_URL'];
   final SecureStorage storage;
+  final http.Client client;
 
-  UserProvider(this.storage);
+  UserProvider(this.storage, this.client);
 
   Future<User> getCurrentUser() async {
     final String? userId = await storage.getUserId();
@@ -19,7 +20,7 @@ class UserProvider {
       throw Exception('No User connected');
     }
 
-    final response = await http.get(Uri.parse('$apiUrl/users/$userId'));
+    final response = await client.get(Uri.parse('$apiUrl/users/$userId'));
 
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -35,7 +36,7 @@ class UserProvider {
       String uri = '$apiUrl/register';
       print('Uri : $uri');
 
-      final response = await http.post(
+      final response = await client.post(
           Uri.parse(uri),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, String>{
@@ -64,7 +65,7 @@ class UserProvider {
   }
   
   Future<User> loginUser(String email, String password) async {
-    final response = await http.post(
+    final response = await client.post(
       Uri.parse('$apiUrl/login'),
       headers: {'Content-Type': 'application/json',},
       body: jsonEncode(<String, String>{'email': email, 'password': password}));
@@ -91,7 +92,7 @@ class UserProvider {
       throw Exception('No User connected');
     }
 
-    final response = await http.put(
+    final response = await client.put(
         Uri.parse('$apiUrl/users/$userId'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(<String, String>{

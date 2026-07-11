@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/bloc/measure_bloc.dart';
@@ -30,7 +31,7 @@ Future<void> main() async {
 
   final storage = SecureStorage();
 
-  final userProvider = UserProvider(storage);
+  final userProvider = UserProvider(storage, http.Client());
   final userRepository = UserRepository(userProvider);
 
   final measureProvider = MeasureProvider(storage);
