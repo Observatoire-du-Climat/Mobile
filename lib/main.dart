@@ -34,7 +34,7 @@ Future<void> main() async {
   final userProvider = UserProvider(storage, http.Client());
   final userRepository = UserRepository(userProvider);
 
-  final measureProvider = MeasureProvider(storage);
+  final measureProvider = MeasureProvider(storage, http.Client());
   final measureRepository = MeasureRepository(measureProvider);
 
 

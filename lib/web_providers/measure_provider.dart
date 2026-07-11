@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +10,7 @@ import 'package:mobile/models/enum/bird_event_type.dart';
 import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/enum/weather_type.dart';
 import 'package:mobile/models/measure.dart';
+import 'package:mobile/models/request/temperature_request.dart';
 import 'package:mobile/models/snow_height.dart';
 import 'package:mobile/models/temperature.dart';
 import 'package:mobile/utils/secure_storage.dart';
@@ -18,9 +20,26 @@ class MeasureProvider {
 
   final apiUrl = dotenv.env['BASE_API_URL'];
   final SecureStorage storage;
+  final http.Client client;
   final dateFormat = DateFormat('yyyy-MM-dd');
   
-  MeasureProvider(this.storage);
+  MeasureProvider(this.storage, this.client);
+
+  Future<http.Response> sendMultipart(String endpoint, Map<String, dynamic> jsonObject, File? picture) async {
+
+    final request = http.MultipartRequest('POST', Uri.parse('$apiUrl/measures/$endpoint'));
+    request.files.add(
+      http.MultipartFile.fromString('request', jsonEncode(jsonObject), contentType: http.MediaType('application', 'json'))
+    );
+    if (picture != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath('picture', picture.path)
+      );
+    }
+    final response = await request.send();
+    return http.Response.fromStream(response);
+
+  }
   
   Future<List<Measure>> getUserMeasures() async {
     final String? userId = await storage.getUserId();
@@ -75,6 +94,34 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
+      final request = TemperatureRequest(
+        userId: int.parse(userId),
+        date: date,
+        location: location,
+        degree: degree
+      ).toJson();
+
+      final response = await sendMultipart('temperature', request, null);
+      if (response.statusCode == 201) {
+        final temperature = Temperature.fromJson(
+            jsonDecode(response.body) as Map<String, dynamic>);
+        return temperature;
+      } else {
+        throw Exception('Failed to create Temperature measure');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  /*
+  Future<Temperature> createTemperature(DateTime date, String location, int degree) async {
+    try {
+      final String? userId = await storage.getUserId();
+      if (userId == null) {
+        throw Exception('No user connected');
+      }
+
       final response = await http.post(
           Uri.parse('$apiUrl/measures/temperature'),
           headers: {'Content-Type': 'application/json'},
@@ -101,6 +148,7 @@ class MeasureProvider {
       throw Exception(e);
     }
   }
+   */
 
   Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation) async {
     try {
