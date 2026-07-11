@@ -26,7 +26,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       final User user = await _userRepository.createUser(request.name, request.email, request.password);
       print("compte créé");
-      emit(UserConnected(name: user.name, email: user.email));
+      emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
       print("création ratée");
       emit(UserError('Creation de compte ratée'));
@@ -40,7 +40,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       final User user = await _userRepository.loginUser(request.email, request.password);
       print("user connecté");
-      emit(UserConnected(name: user.name, email: user.email));
+      emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
       print("Login ratééééé");
       print('Exception : $e');
@@ -53,7 +53,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     try {
       final User user = await _userRepository.getCurrentUser();
-      emit(UserConnected(name: user.name, email: user.email));
+      emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
       print('Error : $e');
       emit(UserError('UserRequest raté'));
@@ -71,7 +71,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       final User user = await _userRepository.updateUser(request.name, request.email, request.password);
       emit(UserUpdated());
-      emit(UserConnected(name: user.name, email: user.email));
+      emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
       print('Error : $e');
       emit(UserError('Failed to update user'));

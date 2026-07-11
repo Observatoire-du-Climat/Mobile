@@ -63,6 +63,7 @@ class ProfilePage extends StatelessWidget {
                           return ProfileCard(
                             name: state.name,
                             email: state.email,
+                            isValid: state.isValid,
                           );
                         }
 
@@ -90,11 +91,13 @@ class ProfilePage extends StatelessWidget {
 class ProfileCard extends StatelessWidget {
   final String name;
   final String email;
+  final bool isValid;
 
   const ProfileCard({
     super.key,
     required this.name,
     required this.email,
+    required this.isValid
   });
 
   @override
@@ -118,7 +121,7 @@ class ProfileCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            "Compte validé",
+            isValid ? "Compte validé" : "Compte non validé",
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 20),

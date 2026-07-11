@@ -7,10 +7,12 @@ class UserLoading extends UserState {}
 class UserConnected extends UserState {
   final String name;
   final String email;
+  final bool isValid;
 
   UserConnected({
     required this.name,
-    required this.email
+    required this.email,
+    required this.isValid
   });
 }
 
