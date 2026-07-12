@@ -49,7 +49,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
 
     try {
       print("envoie de la mesure au provider");
-      await _measureRepository.createTemperature(request.date, request.location, request.degree);
+      await _measureRepository.createTemperature(request.date, request.location, request.degree, request.picture);
       emit(MeasureCreated());
     } catch (e) {
       print('Error : $e');

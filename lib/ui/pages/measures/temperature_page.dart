@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +8,7 @@ import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/bloc/measure_state.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
 import 'package:mobile/utils/date_picker_helper.dart';
+import 'package:mobile/utils/image_picker_helper.dart';
 
 import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
@@ -61,6 +64,29 @@ class _TemperaturePageState extends State<TemperaturePage> {
         _selectedDate = picked;
         _dateController.text = DateFormat('dd.MM.yyyy').format(picked);
       });
+    }
+  }
+
+  File? _selectedPicture;
+
+  Future<void> _pickPicture() async {
+    try {
+      final picture = await ImagePickerHelper.showPicker(context);
+      if (picture != null) {
+        setState(() {
+          _selectedPicture = picture;
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Impossible d'accéder à la caméra ou à la galerie.",
+          ),
+        ),
+      );
     }
   }
 
@@ -124,13 +150,16 @@ class _TemperaturePageState extends State<TemperaturePage> {
 
                                 const SizedBox(height: 24),
 
+                                if (_selectedPicture != null) Text(' ${_selectedPicture!.path} ajoutée !'),
+
+                                if (_selectedPicture != null) const SizedBox(height: 24),
+
+
                                 Column(
                                   children: [
                                     MeasureActionButton(
-                                      title: "Photo",
-                                      onTap: () {
-                                        //
-                                      },
+                                      title: _selectedPicture == null ? "Ajout photo" : "Changer Photo",
+                                      onTap: _pickPicture,
                                     ),
                                     const SizedBox(height: 12),
                                     MeasureActionButton(
@@ -143,7 +172,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
                                             CreateTemperatureRequest(
                                                 date: _selectedDate!,
                                                 location: _locationController.text.trim(),
-                                                degree: int.parse(_degreeController.text.trim()))
+                                                degree: int.parse(_degreeController.text.trim()),
+                                                picture: _selectedPicture
+                                            )
                                         );
                                       },
                                     ),

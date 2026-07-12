@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mobile/models/enum/bird_event_type.dart';
 import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/enum/weather_type.dart';
@@ -10,11 +12,13 @@ class CreateTemperatureRequest extends MeasureEvent {
   final DateTime date;
   final String location;
   final int degree;
+  final File? picture;
 
   CreateTemperatureRequest({
     required this.date,
     required this.location,
-    required this.degree
+    required this.degree,
+    required this.picture
   });
 }
 

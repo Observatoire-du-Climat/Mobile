@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mobile/models/enum/bird_event_type.dart';
 import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/enum/weather_type.dart';
@@ -13,8 +15,8 @@ class MeasureRepository {
 
   Future getSingleMeasure(int id) => measureProvider.getSingleMeasure(id);
 
-  Future createTemperature(DateTime date, String location, int degree) =>
-      measureProvider.createTemperature(date, location, degree);
+  Future createTemperature(DateTime date, String location, int degree, File? picture) =>
+      measureProvider.createTemperature(date, location, degree, picture);
 
   Future createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation) =>
       measureProvider.createSnowHeight(date, location, height, weather, precipitation);

@@ -91,7 +91,7 @@ class MeasureProvider {
     }
   }
 
-  Future<Temperature> createTemperature(DateTime date, String location, int degree) async {
+  Future<Temperature> createTemperature(DateTime date, String location, int degree, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
       if (userId == null) {
@@ -105,7 +105,7 @@ class MeasureProvider {
         degree: degree
       ).toJson();
 
-      final response = await sendMultipart('temperature', request, null);
+      final response = await sendMultipart('temperature', request, picture);
       if (response.statusCode == 201) {
         final temperature = Temperature.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
