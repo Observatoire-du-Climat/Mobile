@@ -62,7 +62,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
 
     try {
       print("envoie de la mesure au provider");
-      await _measureRepository.createSnowHeight(request.date, request.location, request.height, request.weather, request.precipitation);
+      await _measureRepository.createSnowHeight(request.date, request.location, request.height, request.weather, request.precipitation, request.picture);
       emit(MeasureCreated());
     } catch(e) {
       print('Error : $e');
@@ -75,7 +75,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
 
     try {
       print("envoie de la mesure au provider");
-      await _measureRepository.createBirdMigration(request.date, request.location, request.specie, request.event);
+      await _measureRepository.createBirdMigration(request.date, request.location, request.specie, request.event, request.picture);
       emit(MeasureCreated());
     } catch(e) {
       print('Error : $e');
@@ -88,7 +88,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
 
     try {
       print("envoie de la mesure au provider");
-      await _measureRepository.createEggsLaying(request.date, request.location, request.number);
+      await _measureRepository.createEggsLaying(request.date, request.location, request.number, request.picture);
       emit(MeasureCreated());
     } catch(e) {
       print('Error : $e');

@@ -16,7 +16,7 @@ class MeasureActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
+      width: 150,
       height: 36,
       child: ElevatedButton(
         onPressed: onTap,

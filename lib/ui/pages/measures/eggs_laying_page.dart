@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +11,7 @@ import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
 
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
+import '../../../utils/image_picker_helper.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
@@ -63,6 +66,28 @@ class _EggsLayingPageState extends State<EggsLayingPage> {
     }
   }
 
+  File? _selectedPicture;
+
+  Future<void> _pickPicture() async {
+    try {
+      final picture = await ImagePickerHelper.showPicker(context);
+      if (picture != null) {
+        setState(() {
+          _selectedPicture = picture;
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Impossible d'accéder à la caméra ou à la galerie.",
+        ),
+      ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,13 +143,16 @@ class _EggsLayingPageState extends State<EggsLayingPage> {
                                 MeasureTextField(label: "Lieu", controller: _locationController,),
                                 MeasureTextField(label: "Nombre de pontes", controller: _numberController, keyboardType: TextInputType.number,),
                                 const SizedBox(height: 24),
+
+                                if (_selectedPicture != null) Text(' Image ajoutée !'),
+
+                                if (_selectedPicture != null) const SizedBox(height: 24),
+
                                 Column(
                                   children: [
                                     MeasureActionButton(
-                                      title: "Photo",
-                                      onTap: () {
-                                        //
-                                      },
+                                      title: _selectedPicture == null ? "Ajout Photo" : "Changer Photo",
+                                      onTap: _pickPicture,
                                     ),
                                     const SizedBox(height: 12),
                                     MeasureActionButton(
@@ -137,7 +165,9 @@ class _EggsLayingPageState extends State<EggsLayingPage> {
                                           CreateEggsLayingRequest(
                                             date: _selectedDate!,
                                             location: _locationController.text.trim(),
-                                            number: int.parse(_numberController.text.trim()))
+                                            number: int.parse(_numberController.text.trim()),
+                                            picture: _selectedPicture
+                                          )
                                         );
                                       },
                                     ),

@@ -18,14 +18,14 @@ class MeasureRepository {
   Future createTemperature(DateTime date, String location, int degree, File? picture) =>
       measureProvider.createTemperature(date, location, degree, picture);
 
-  Future createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation) =>
-      measureProvider.createSnowHeight(date, location, height, weather, precipitation);
+  Future createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation, File? picture) =>
+      measureProvider.createSnowHeight(date, location, height, weather, precipitation, picture);
 
-  Future createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event) =>
-      measureProvider.createBirdMigration(date, location, specie, event);
+  Future createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event, File? picture) =>
+      measureProvider.createBirdMigration(date, location, specie, event, picture);
 
-  Future createEggsLaying(DateTime date, String location, int number) =>
-      measureProvider.createEggsLaying(date, location, number);
+  Future createEggsLaying(DateTime date, String location, int number, File? picture) =>
+      measureProvider.createEggsLaying(date, location, number, picture);
 
   Future updateTemperature(int measureId, DateTime date, String location, int degree) =>
       measureProvider.updateTemperature(measureId, date, location, degree);

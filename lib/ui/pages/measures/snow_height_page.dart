@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +13,7 @@ import 'package:mobile/ui/widgets/measure_input/weather_dropdown.dart';
 
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
+import '../../../utils/image_picker_helper.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
@@ -65,6 +68,29 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
         _selectedDate = picked;
         _dateController.text = DateFormat('dd.MM.yyyy').format(picked);
       });
+    }
+  }
+
+  File? _selectedPicture;
+
+  Future<void> _pickPicture() async {
+    try {
+      final picture = await ImagePickerHelper.showPicker(context);
+      if (picture != null) {
+        setState(() {
+          _selectedPicture = picture;
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Impossible d'accéder à la caméra ou à la galerie.",
+        ),
+      ),
+      );
     }
   }
 
@@ -137,16 +163,17 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
                                 ),
                                 MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController, keyboardType: TextInputType.number,),
 
-
                                 const SizedBox(height: 24),
+
+                                if (_selectedPicture != null) Text(' Image ajoutée !'),
+
+                                if (_selectedPicture != null) const SizedBox(height: 24),
 
                                 Column(
                                   children: [
                                     MeasureActionButton(
-                                      title: "Photo",
-                                      onTap: () {
-                                        //
-                                      },
+                                      title: _selectedPicture == null ? "Ajout Photo" : "Changer Photo",
+                                      onTap: _pickPicture,
                                     ),
                                     const SizedBox(height: 12),
                                     MeasureActionButton(
@@ -161,7 +188,8 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
                                                 location: _locationController.text.trim(),
                                                 height: int.parse(_heightController.text.trim()),
                                                 weather: _weatherCondition,
-                                                precipitation: int.parse(_precipitationController.text.trim())
+                                                precipitation: int.parse(_precipitationController.text.trim()),
+                                                picture: _selectedPicture
                                             )
                                         );
                                       },

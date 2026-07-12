@@ -28,13 +28,15 @@ class CreateSnowHeightRequest extends MeasureEvent {
   final int height;
   final WeatherType weather;
   final int precipitation;
+  final File? picture;
 
   CreateSnowHeightRequest({
     required this.date,
     required this.location,
     required this.height,
     required this.weather,
-    required this.precipitation
+    required this.precipitation,
+    required this.picture
   });
 }
 
@@ -43,12 +45,14 @@ class CreateBirdMigrationRequest extends MeasureEvent {
   final String location;
   final BirdSpecie specie;
   final BirdEventType event;
+  final File? picture;
 
   CreateBirdMigrationRequest({
     required this.date,
     required this.location,
     required this.specie,
-    required this.event
+    required this.event,
+    required this.picture
   });
 }
 
@@ -56,11 +60,13 @@ class CreateEggsLayingRequest extends MeasureEvent {
   final DateTime date;
   final String location;
   final int number;
+  final File? picture;
 
   CreateEggsLayingRequest({
     required this.date,
     required this.location,
-    required this.number
+    required this.number,
+    required this.picture
   });
 }
 

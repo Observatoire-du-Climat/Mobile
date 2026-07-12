@@ -150,10 +150,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
 
                                 const SizedBox(height: 24),
 
-                                if (_selectedPicture != null) Text(' ${_selectedPicture!.path} ajoutée !'),
+                                if (_selectedPicture != null) Text('Image ajoutée !'),
 
                                 if (_selectedPicture != null) const SizedBox(height: 24),
-
 
                                 Column(
                                   children: [

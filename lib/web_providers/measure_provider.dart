@@ -118,7 +118,7 @@ class MeasureProvider {
     }
   }
 
-  Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation) async {
+  Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
       if (userId == null) {
@@ -134,7 +134,7 @@ class MeasureProvider {
           precipitation: precipitation
       ).toJson();
 
-      final response = await sendMultipart('snow-height', request, null);
+      final response = await sendMultipart('snow-height', request, picture);
       if (response.statusCode == 201) {
         final snowHeight = SnowHeight.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -147,7 +147,7 @@ class MeasureProvider {
     }
   }
 
-  Future<BirdMigration> createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event) async {
+  Future<BirdMigration> createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
       if (userId == null) {
@@ -162,7 +162,7 @@ class MeasureProvider {
           event: event
       ).toJson();
 
-      final response = await sendMultipart('bird-migration', request, null);
+      final response = await sendMultipart('bird-migration', request, picture);
       if (response.statusCode == 201) {
         final birdMigration = BirdMigration.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -175,7 +175,7 @@ class MeasureProvider {
     }
   }
 
-  Future<EggsLaying> createEggsLaying(DateTime date, String location, int number) async {
+  Future<EggsLaying> createEggsLaying(DateTime date, String location, int number, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
       if (userId == null) {
@@ -189,7 +189,7 @@ class MeasureProvider {
           number: number
       ).toJson();
 
-      final response = await sendMultipart('eggs-laying', request, null);
+      final response = await sendMultipart('eggs-laying', request, picture);
       if (response.statusCode == 201) {
         final eggsLaying = EggsLaying.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -201,148 +201,6 @@ class MeasureProvider {
       throw Exception(e);
     }
   }
-
-  /*
-  Future<Temperature> createTemperature(DateTime date, String location, int degree) async {
-    try {
-      final String? userId = await storage.getUserId();
-      if (userId == null) {
-        throw Exception('No user connected');
-      }
-
-      final response = await http.post(
-          Uri.parse('$apiUrl/measures/temperature'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(<String, dynamic>{
-            'userId': userId,
-            'date': dateFormat.format(date),
-            'location': location,
-            'degree': degree
-          })
-      ).timeout(Duration(seconds: 10));
-
-      print('response code : ${response.statusCode}');
-      print(response);
-
-      if (response.statusCode == 201) {
-        final temperature = Temperature.fromJson(
-            jsonDecode(response.body) as Map<String, dynamic>);
-        return temperature;
-      } else {
-        throw Exception('Failed to create Temperature measure');
-      }
-    } catch (e) {
-      print(e);
-      throw Exception(e);
-    }
-  }
-
-
-  Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation) async {
-    try {
-      final String? userId = await storage.getUserId();
-      if (userId == null) {
-        throw Exception('No user connected');
-      }
-
-      final response = await http.post(
-          Uri.parse('$apiUrl/measures/snow-height'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(<String, dynamic>{
-            'userId': userId,
-            'date': dateFormat.format(date),
-            'location': location,
-            'height': height,
-            'weather': weather.name,
-            'precipitation': precipitation
-          })
-      ).timeout(Duration(seconds: 10));
-
-      print('response code : ${response.statusCode}');
-      print(response);
-
-      if (response.statusCode == 201) {
-        final snowHeight = SnowHeight.fromJson(
-            jsonDecode(response.body) as Map<String, dynamic>);
-        return snowHeight;
-      } else {
-        throw Exception('Failed to create SnowHeight measure');
-      }
-    } catch (e) {
-      print(e);
-      throw Exception(e);
-    }
-  }
-
-  Future<BirdMigration> createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event) async {
-    try {
-      final String? userId = await storage.getUserId();
-      if (userId == null) {
-        throw Exception('No user connected');
-      }
-
-      final response = await http.post(
-          Uri.parse('$apiUrl/measures/bird-migration'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(<String, dynamic>{
-            'userId': userId,
-            'date': dateFormat.format(date),
-            'location': location,
-            'specie': specie.name,
-            'event': event.name,
-          })
-      ).timeout(Duration(seconds: 10));
-
-      print('response code : ${response.statusCode}');
-      print(response);
-
-      if (response.statusCode == 201) {
-        final birdMigration = BirdMigration.fromJson(
-            jsonDecode(response.body) as Map<String, dynamic>);
-        return birdMigration;
-      } else {
-        throw Exception('Failed to create BirdMigration measure');
-      }
-    } catch (e) {
-      print(e);
-      throw Exception(e);
-    }
-  }
-
-  Future<EggsLaying> createEggsLaying(DateTime date, String location, int number) async {
-    try {
-      final String? userId = await storage.getUserId();
-      if (userId == null) {
-        throw Exception('No user connected');
-      }
-
-      final response = await http.post(
-          Uri.parse('$apiUrl/measures/eggs-laying'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(<String, dynamic>{
-            'userId': userId,
-            'date': dateFormat.format(date),
-            'location': location,
-            'number': number
-          })
-      ).timeout(Duration(seconds: 10));
-
-      print('response code : ${response.statusCode}');
-      print(response);
-
-      if (response.statusCode == 201) {
-        final eggsLaying = EggsLaying.fromJson(
-            jsonDecode(response.body) as Map<String, dynamic>);
-        return eggsLaying;
-      } else {
-        throw Exception('Failed to create EggsLaying measure');
-      }
-    } catch (e) {
-      print(e);
-      throw Exception(e);
-    }
-  }
-   */
 
   Future<Temperature> updateTemperature(int measureId, DateTime date, String location, int degree) async {
     try {

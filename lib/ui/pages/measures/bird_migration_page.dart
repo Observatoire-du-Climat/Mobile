@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +15,7 @@ import 'package:mobile/ui/widgets/measure_input/specie_dropdown.dart';
 
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
+import '../../../utils/image_picker_helper.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
@@ -65,6 +68,29 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
         _selectedDate = picked;
         _dateController.text = DateFormat('dd.MM.yyyy').format(picked);
       });
+    }
+  }
+
+  File? _selectedPicture;
+
+  Future<void> _pickPicture() async {
+    try {
+      final picture = await ImagePickerHelper.showPicker(context);
+      if (picture != null) {
+        setState(() {
+          _selectedPicture = picture;
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Impossible d'accéder à la caméra ou à la galerie.",
+        ),
+      ),
+      );
     }
   }
 
@@ -139,22 +165,37 @@ class _BirdMigrationPageState extends State<BirdMigrationPage> {
                                         });
                                       }),
                                   const SizedBox(height: 24),
-                                  MeasureActionButton(
-                                    title: isLoading ? "Chargement..." : "Valider",
-                                    onTap: isLoading ? null : () {
-                                      if (!_formKey.currentState!.validate()) {
-                                        return;
-                                      }
-                                      context.read<MeasureBloc>().add(
-                                          CreateBirdMigrationRequest(
-                                              date: _selectedDate!,
-                                              location: _locationController.text.trim(),
-                                              specie: _specie,
-                                              event: _eventType
-                                          )
-                                      );
-                                    },
-                                  ),
+
+                                  if (_selectedPicture != null) Text(' Image ajoutée !'),
+
+                                  if (_selectedPicture != null) const SizedBox(height: 24),
+
+                                  Column(
+                                    children: [
+                                      MeasureActionButton(
+                                        title: _selectedPicture == null ? "Ajout Photo" : "Changer Photo",
+                                        onTap: _pickPicture,
+                                      ),
+                                      const SizedBox(height: 12),
+                                      MeasureActionButton(
+                                        title: isLoading ? "Chargement..." : "Valider",
+                                        onTap: isLoading ? null : () {
+                                          if (!_formKey.currentState!.validate()) {
+                                            return;
+                                          }
+                                          context.read<MeasureBloc>().add(
+                                              CreateBirdMigrationRequest(
+                                                  date: _selectedDate!,
+                                                  location: _locationController.text.trim(),
+                                                  specie: _specie,
+                                                  event: _eventType,
+                                                  picture: _selectedPicture
+                                              )
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
                           )
