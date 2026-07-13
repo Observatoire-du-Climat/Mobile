@@ -1,12 +1,30 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/bloc/measure_bloc.dart';
+import 'package:mobile/bloc/measure_event.dart';
+import 'package:mobile/bloc/measure_state.dart';
+import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
+import 'package:mobile/utils/date_picker_helper.dart';
+import 'package:mobile/utils/image_picker_helper.dart';
 
 import '../../../app_theme.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
+import '../../widgets/measure_input/measure_text_field.dart';
 
-class TemperaturePage extends StatelessWidget {
+class TemperaturePage extends StatefulWidget {
   const TemperaturePage({super.key});
+
+  @override
+  State<TemperaturePage> createState() => _TemperaturePageState();
+
+}
+
+class _TemperaturePageState extends State<TemperaturePage> {
 
   static const String indicatorInfo =
       "Le suivi régulier de la température permet d’observer l’évolution des conditions environnementales locales. "
@@ -24,144 +42,168 @@ class TemperaturePage extends StatelessWidget {
       "Le relevé doit être réalisé à 8h en hiver et 7h en été pour cadrer avec la température minimale journalière.\n\n"
       "Reportez la mesure en degrés Celsius (°C).";
 
+  final _formKey = GlobalKey<FormState>();
+  final _dateController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _degreeController = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      bottomNavigationBar: const NavBar(current: NavItem.measure),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/logo-vert.png',
-                height: 70,
-              ),
+  void dispose() {
+    _dateController.dispose();
+    _locationController.dispose();
+    _degreeController.dispose();
+    super.dispose();
+  }
 
-              const SizedBox(height: 40),
+  DateTime? _selectedDate;
 
-              const TemperatureForm(),
+  Future<void> _pickDate() async {
+    final picked = await DatePickerHelper.pickDate(context);
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _dateController.text = DateFormat('dd.MM.yyyy').format(picked);
+      });
+    }
+  }
 
-              const SizedBox(height: 32),
+  File? _selectedPicture;
 
-              const InfoTextSection(
-                title: "Informations sur l'indicateur",
-                paragraph: indicatorInfo,
-              ),
-
-              const SizedBox(height: 32),
-
-              const InfoTextSection(
-                title: "Tutoriel",
-                paragraph: tutorial,
-              ),
-            ],
+  Future<void> _pickPicture() async {
+    try {
+      final picture = await ImagePickerHelper.showPicker(context);
+      if (picture != null) {
+        setState(() {
+          _selectedPicture = picture;
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Impossible d'accéder à la caméra ou à la galerie.",
           ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
-
-class TemperatureForm extends StatelessWidget {
-  const TemperatureForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.lightGrey,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.forestGreen),
-      ),
-      child: Column(
-        children: [
-          Text(
-            "Température",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: 170,
-            height: 1,
-            color: AppColors.forestGreen,
-          ),
+    return BlocListener<MeasureBloc, MeasureState>(
+        listener: (context, state) {
+          if (state is MeasureCreationError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+          if (state is MeasureCreated) {
+            Navigator.pop(context);
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.white,
+          bottomNavigationBar: const NavBar(current: NavItem.measure),
+          body: BlocBuilder<MeasureBloc, MeasureState>(
+              builder: (context, state) {
+                final isLoading = state is MeasureCreationLoading;
 
-          const SizedBox(height: 32),
+                return SafeArea(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/logo-vert.png',
+                          height: 70,
+                        ),
 
-          const TemperatureField(label: "Date"),
-          const TemperatureField(label: "Degré"),
-          const TemperatureField(label: "Lieu"),
+                        const SizedBox(height: 40),
 
-          const SizedBox(height: 24),
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: AppColors.lightGrey,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.forestGreen),
+                          ),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Température",
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 170,
+                                  height: 1,
+                                  color: AppColors.forestGreen,
+                                ),
 
-          Column(
-            children: [
-              MeasureActionButton(
-                title: "Photo",
-                onTap: () {
-                  //
-                },
-              ),
-              const SizedBox(height: 12),
-              MeasureActionButton(
-                title: "Valider",
-                onTap: () {
-                  //
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+                                const SizedBox(height: 32),
 
-class TemperatureField extends StatelessWidget {
-  final String label;
+                                MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate),
+                                MeasureTextField(label: "Lieu", controller: _locationController,),
+                                MeasureTextField(label: "Degré", controller: _degreeController, keyboardType: TextInputType.number,),
 
-  const TemperatureField({
-    super.key,
-    required this.label,
-  });
+                                const SizedBox(height: 24),
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 70,
-            child: Text(
-              "$label :",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 34,
-              child: TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
+                                if (_selectedPicture != null) Text('Image ajoutée !'),
+
+                                if (_selectedPicture != null) const SizedBox(height: 24),
+
+                                Column(
+                                  children: [
+                                    MeasureActionButton(
+                                      title: _selectedPicture == null ? "Ajout photo" : "Changer Photo",
+                                      onTap: _pickPicture,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    MeasureActionButton(
+                                      title: isLoading ? "Chargement..." : "Valider",
+                                      onTap: isLoading ? null : () {
+                                        if (!_formKey.currentState!.validate()) {
+                                          return;
+                                        }
+                                        context.read<MeasureBloc>().add(
+                                            CreateTemperatureRequest(
+                                                date: _selectedDate!,
+                                                location: _locationController.text.trim(),
+                                                degree: int.parse(_degreeController.text.trim()),
+                                                picture: _selectedPicture
+                                            )
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        const InfoTextSection(
+                          title: "Informations sur l'indicateur",
+                          paragraph: indicatorInfo,
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        const InfoTextSection(
+                          title: "Tutoriel",
+                          paragraph: tutorial,
+                        ),
+                      ],
+                    ),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+                );
+              }
+          )
+        ),
     );
   }
 }

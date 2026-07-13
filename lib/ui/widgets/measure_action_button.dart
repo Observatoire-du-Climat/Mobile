@@ -3,18 +3,20 @@ import '../../app_theme.dart';
 
 class MeasureActionButton extends StatelessWidget {
   final String title;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final Color borderColor;
 
   const MeasureActionButton({
     super.key,
     required this.title,
     required this.onTap,
+    this.borderColor = AppColors.forestGreen
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
+      width: 150,
       height: 36,
       child: ElevatedButton(
         onPressed: onTap,
@@ -22,7 +24,7 @@ class MeasureActionButton extends StatelessWidget {
           backgroundColor: AppColors.lightGrey,
           foregroundColor: Colors.black,
           elevation: 0,
-          side: const BorderSide(color: AppColors.forestGreen),
+          side: BorderSide(color: borderColor),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),

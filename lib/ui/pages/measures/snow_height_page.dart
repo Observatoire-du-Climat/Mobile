@@ -1,15 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/bloc/measure_bloc.dart';
+import 'package:mobile/bloc/measure_event.dart';
+import 'package:mobile/bloc/measure_state.dart';
+import 'package:mobile/models/enum/weather_type.dart';
+import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
+import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
+import 'package:mobile/ui/widgets/measure_input/weather_dropdown.dart';
 
 import '../../../app_theme.dart';
+import '../../../utils/date_picker_helper.dart';
+import '../../../utils/image_picker_helper.dart';
 import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 
-enum WeatherCondition {
-  soleil,
-  pluie,
-  neige,
-}
 
 class SnowHeightPage extends StatefulWidget {
   const SnowHeightPage({super.key});
@@ -19,7 +27,7 @@ class SnowHeightPage extends StatefulWidget {
 }
 
 class _SnowHeightPageState extends State<SnowHeightPage> {
-  WeatherCondition _weatherCondition = WeatherCondition.soleil;
+  WeatherType _weatherCondition = WeatherType.sunny;
 
   static const String indicatorInfo =
       "Le manteau neigeux correspond à la couche de neige qui recouvre le sol durant l’hiver. "
@@ -36,246 +44,182 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
       "Indiquez les conditions météo lors du relevé : soleil, pluie ou neige.\n\n"
       "Indiquez si des précipitations neigeuses ont eu lieu le jour de votre passage.";
 
+  final _formKey = GlobalKey<FormState>();
+  final _dateController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _heightController = TextEditingController();
+  final _precipitationController = TextEditingController();
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      bottomNavigationBar: const NavBar(current: NavItem.measure),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Image.asset(
-                'assets/images/logo-vert.png',
-                height: 70,
-              ),
+  void dispose() {
+    _dateController.dispose();
+    _locationController.dispose();
+    _heightController.dispose();
+    _precipitationController.dispose();
+    super.dispose();
+  }
 
-              const SizedBox(height: 40),
+  DateTime? _selectedDate;
 
-              _SnowHeightForm(
-                weatherCondition: _weatherCondition,
-                onWeatherChanged: (value) {
-                  if (value == null) return;
+  Future<void> _pickDate() async {
+    final picked = await DatePickerHelper.pickDate(context);
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _dateController.text = DateFormat('dd.MM.yyyy').format(picked);
+      });
+    }
+  }
 
-                  setState(() {
-                    _weatherCondition = value;
-                  });
-                },
-              ),
+  File? _selectedPicture;
 
-              const SizedBox(height: 32),
-
-              const InfoTextSection(
-                title: "Informations sur l'indicateur",
-                paragraph: indicatorInfo,
-              ),
-
-              const SizedBox(height: 32),
-
-              const InfoTextSection(
-                title: "Tutoriel",
-                paragraph: tutorial,
-              ),
-            ],
-          ),
+  Future<void> _pickPicture() async {
+    try {
+      final picture = await ImagePickerHelper.showPicker(context);
+      if (picture != null) {
+        setState(() {
+          _selectedPicture = picture;
+        });
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Impossible d'accéder à la caméra ou à la galerie.",
         ),
       ),
-    );
+      );
+    }
   }
-}
-
-class _SnowHeightForm extends StatelessWidget {
-  final WeatherCondition weatherCondition;
-  final ValueChanged<WeatherCondition?> onWeatherChanged;
-
-  const _SnowHeightForm({
-    required this.weatherCondition,
-    required this.onWeatherChanged,
-  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppColors.lightGrey,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.forestGreen),
-      ),
-      child: Column(
-        children: [
-          Text(
-            "Hauteur des Neiges",
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: 170,
-            height: 1,
-            color: AppColors.forestGreen,
-          ),
+    return BlocListener<MeasureBloc, MeasureState>(
+      listener: (context, state) {
+        if (state is MeasureCreationError) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+        if (state is MeasureCreated) {
+          Navigator.pop(context);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        bottomNavigationBar: const NavBar(current: NavItem.measure),
+        body: BlocBuilder<MeasureBloc, MeasureState>(
+            builder: (context, state) {
+              final isLoading = state is MeasureCreationLoading;
 
-          const SizedBox(height: 32),
+              return SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/logo-vert.png',
+                        height: 70,
+                      ),
 
-          const _SnowField(label: "Date"),
-          const _SnowField(label: "Hauteur"),
-          _WeatherRadioGroup(
-            selected: weatherCondition,
-            onChanged: onWeatherChanged,
-          ),
-          const _SnowField(label: "Précipitations neigeuses"),
-          const _SnowField(label: "Lieu"),
+                      const SizedBox(height: 40),
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: AppColors.lightGrey,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppColors.forestGreen),
+                        ),
+                        child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Hauteur des Neiges",
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  width: 170,
+                                  height: 1,
+                                  color: AppColors.forestGreen,
+                                ),
 
-          const SizedBox(height: 24),
+                                const SizedBox(height: 32),
 
-          Column(
-            children: [
-              MeasureActionButton(
-                title: "Photo",
-                onTap: () {
-                  //
-                },
-              ),
-              const SizedBox(height: 12),
-              MeasureActionButton(
-                title: "Valider",
-                onTap: () {
-                  //
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+                                MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
+                                MeasureTextField(label: "Lieu", controller: _locationController,),
+                                MeasureTextField(label: "Hauteur", controller: _heightController, keyboardType: TextInputType.number,),
+                                WeatherDropdown(
+                                  selected: _weatherCondition,
+                                  onChanged: (value) {
+                                    if (value == null) return;
 
-class _SnowField extends StatelessWidget {
-  final String label;
+                                    setState(() {
+                                      _weatherCondition = value;
+                                    });
+                                  },
+                                ),
+                                MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController, keyboardType: TextInputType.number,),
 
-  const _SnowField({
-    required this.label,
-  });
+                                const SizedBox(height: 24),
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 145,
-            child: Text(
-              "$label :",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 34,
-              child: TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: AppColors.white,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                    borderSide: BorderSide.none,
+                                if (_selectedPicture != null) Text(' Image ajoutée !'),
+
+                                if (_selectedPicture != null) const SizedBox(height: 24),
+
+                                Column(
+                                  children: [
+                                    MeasureActionButton(
+                                      title: _selectedPicture == null ? "Ajout Photo" : "Changer Photo",
+                                      onTap: _pickPicture,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    MeasureActionButton(
+                                      title: isLoading ? "Chargement..." : "Valider",
+                                      onTap: isLoading ? null : () {
+                                        if (!_formKey.currentState!.validate()) {
+                                          return;
+                                        }
+                                        context.read<MeasureBloc>().add(
+                                            CreateSnowHeightRequest(
+                                                date: _selectedDate!,
+                                                location: _locationController.text.trim(),
+                                                height: int.parse(_heightController.text.trim()),
+                                                weather: _weatherCondition,
+                                                precipitation: int.parse(_precipitationController.text.trim()),
+                                                picture: _selectedPicture
+                                            )
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                        )
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      const InfoTextSection(
+                        title: "Informations sur l'indicateur",
+                        paragraph: indicatorInfo,
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      const InfoTextSection(
+                        title: "Tutoriel",
+                        paragraph: tutorial,
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _WeatherRadioGroup extends StatelessWidget {
-  final WeatherCondition selected;
-  final ValueChanged<WeatherCondition?> onChanged;
-
-  const _WeatherRadioGroup({
-    required this.selected,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 145,
-            child: Text(
-              "Conditions météo :",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                _WeatherRadioOption(
-                  label: "Soleil",
-                  value: WeatherCondition.soleil,
-                  selected: selected,
-                  onChanged: onChanged,
-                ),
-                _WeatherRadioOption(
-                  label: "Pluie",
-                  value: WeatherCondition.pluie,
-                  selected: selected,
-                  onChanged: onChanged,
-                ),
-                _WeatherRadioOption(
-                  label: "Neige",
-                  value: WeatherCondition.neige,
-                  selected: selected,
-                  onChanged: onChanged,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _WeatherRadioOption extends StatelessWidget {
-  final String label;
-  final WeatherCondition value;
-  final WeatherCondition selected;
-  final ValueChanged<WeatherCondition?> onChanged;
-
-  const _WeatherRadioOption({
-    required this.label,
-    required this.value,
-    required this.selected,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 28,
-      child: RadioListTile<WeatherCondition>(
-        value: value,
-        groupValue: selected,
-        onChanged: onChanged,
-        dense: true,
-        contentPadding: EdgeInsets.zero,
-        activeColor: AppColors.forestGreen,
-        title: Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+              );
+            }
+        )
       ),
     );
   }
