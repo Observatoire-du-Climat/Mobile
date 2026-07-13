@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/bloc/measure_bloc.dart';
@@ -37,6 +39,10 @@ Future<void> main() async {
   final measureProvider = MeasureProvider(storage, http.Client());
   final measureRepository = MeasureRepository(measureProvider);
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
 
   runApp(MyApp(userRepository: userRepository, measureRepository: measureRepository,));
 }
