@@ -12,6 +12,7 @@ import 'package:mobile/ui/widgets/measure_input/weather_dropdown.dart';
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
 import '../../widgets/measure_action_button.dart';
+import '../../widgets/measure_picture.dart';
 
 class SnowHeightDetailsPage extends StatefulWidget {
   final SnowHeight measure;
@@ -127,6 +128,10 @@ class _SnowHeightDetailsPageState extends State<SnowHeightDetailsPage> {
                     ),
                     MeasureTextField(label: "Précipitations neigeuses",
                       controller: _precipitationController, keyboardType: TextInputType.number,),
+
+                    const SizedBox(height: 24),
+
+                    MeasurePicture(measureId: widget.measure.id),
 
                     const SizedBox(height: 24),
 

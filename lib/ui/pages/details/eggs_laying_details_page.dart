@@ -10,6 +10,7 @@ import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
 import '../../widgets/measure_action_button.dart';
+import '../../widgets/measure_picture.dart';
 
 class EggsLayingDetailsPage extends StatefulWidget {
   final EggsLaying measure;
@@ -100,7 +101,13 @@ class _EggsLayingPageDetailsState extends State<EggsLayingDetailsPage> {
                     MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
                     MeasureTextField(label: "Lieu", controller: _locationController,),
                     MeasureTextField(label: "Nombre de pontes", controller: _numberController, keyboardType: TextInputType.number,),
+
                     const SizedBox(height: 24),
+
+                    MeasurePicture(measureId: widget.measure.id),
+
+                    const SizedBox(height: 24),
+
                     Column(
                       children: [
                         MeasureActionButton(

@@ -5,6 +5,7 @@ import 'package:mobile/bloc/measure_bloc.dart';
 import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/models/temperature.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
+import 'package:mobile/ui/widgets/measure_picture.dart';
 
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
@@ -100,6 +101,10 @@ class _TemperatureDetailsPageState extends State<TemperatureDetailsPage> {
                     MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
                     MeasureTextField(label: "Lieu", controller: _locationController,),
                     MeasureTextField(label: "Degré", controller: _degreeController, keyboardType: TextInputType.number,),
+
+                    const SizedBox(height: 24),
+
+                    MeasurePicture(measureId: widget.measure.id),
 
                     const SizedBox(height: 24),
 

@@ -42,7 +42,6 @@ class MeasureProvider {
     }
     final response = await request.send();
     return http.Response.fromStream(response);
-
   }
   
   Future<List<Measure>> getUserMeasures() async {
