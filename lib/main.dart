@@ -51,6 +51,8 @@ Future<void> main() async {
   print('User granted permission: ${settings.authorizationStatus}');
   final token = await messaging.getToken();
   print('Token : $token');
+  //Subscribe to topic to get the notifications
+  await messaging.subscribeToTopic("all-users");
   //Background notifications handler, can't be in a class
   @pragma('vm:entry-point')
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
