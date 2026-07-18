@@ -28,7 +28,7 @@ class MeasurePicture extends StatelessWidget {
           if (loadingProgress == null) {
             return child;
           }
-          return Text('Chargement');
+          return Text('Chargement de la photo...');
         },
         errorBuilder: (context, error, stackTrace) {
           return SizedBox(

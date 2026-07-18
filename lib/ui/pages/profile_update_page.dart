@@ -69,7 +69,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                             child: Column(
                                 children: [
                                   Text(
-                                    "Modification du profile",
+                                    "Modification du profil",
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const SizedBox(height: 6),

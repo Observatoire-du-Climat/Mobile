@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     SafeArea(
-                      child: Padding(
+                      child: SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(horizontal: 31),
                         child: Column(
                           children: [
