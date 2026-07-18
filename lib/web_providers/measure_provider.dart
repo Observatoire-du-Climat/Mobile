@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -51,8 +50,6 @@ class MeasureProvider {
     }
     
     final response = await http.get(Uri.parse('$apiUrl/measures/user/$userId'));
-    print('response code :  ${response.statusCode}');
-    print(response.body);
 
     if (response.statusCode == 200) {
       //return json.decode(response.body).map((m) => Measure.fromJson(m)).toList();
@@ -68,8 +65,6 @@ class MeasureProvider {
   Future getSingleMeasure(int id) async {
 
     final response = await http.get(Uri.parse('$apiUrl/measures/$id'));
-    print('response code :  ${response.statusCode}');
-    print(response.body);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> body = jsonDecode(response.body) as Map<String, dynamic>;
@@ -219,8 +214,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
 
       if (response.statusCode == 200) {
         final temperature = Temperature.fromJson(
@@ -230,7 +223,6 @@ class MeasureProvider {
         throw Exception('Failed to update Temperature measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -255,9 +247,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
-
       if (response.statusCode == 200) {
         final snowHeight = SnowHeight.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -266,7 +255,6 @@ class MeasureProvider {
         throw Exception('Failed to update SnowHeight measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -290,9 +278,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
-
       if (response.statusCode == 200) {
         final birdMigration = BirdMigration.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -301,7 +286,6 @@ class MeasureProvider {
         throw Exception('Failed to update BirdMigration measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -324,9 +308,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
-
       if (response.statusCode == 200) {
         final eggsLaying = EggsLaying.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -335,7 +316,6 @@ class MeasureProvider {
         throw Exception('Failed to update EggsLaying measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -346,14 +326,10 @@ class MeasureProvider {
           Uri.parse('$apiUrl/measures/$measureId')
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
-
       if (response.statusCode != 204) {
         throw Exception('Failed to delete Temperature measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

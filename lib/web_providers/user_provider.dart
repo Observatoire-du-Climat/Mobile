@@ -32,9 +32,7 @@ class UserProvider {
 
   Future<User> createUser(String name, String email, String password) async {
     try {
-      print("provider test creation");
       String uri = '$apiUrl/register';
-      print('Uri : $uri');
 
       final response = await client.post(
           Uri.parse(uri),
@@ -44,8 +42,6 @@ class UserProvider {
             'email': email,
             'password': password
           })).timeout(const Duration(seconds: 10));
-      print("reponse recue : ${response.statusCode}");
-      print(response);
 
       if (response.statusCode == 201) {
         final user = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
@@ -56,8 +52,6 @@ class UserProvider {
       }
 
     } catch (e) {
-      print("Exception");
-      print(e);
       throw Exception();
     }
 
@@ -71,13 +65,10 @@ class UserProvider {
       body: jsonEncode(<String, String>{'email': email, 'password': password}));
 
     if (response.statusCode == 200) {
-      print('reussite, status code : ${response.statusCode}');
       final user = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       storage.writeUserId(user.id);
-      print(user);
       return user;
     } else {
-      print("status code recu : ${response.statusCode}");
       throw Exception('Failed to login');
     }
   }
@@ -100,14 +91,11 @@ class UserProvider {
           'email': email,
           'password': password
         })).timeout(const Duration(seconds: 10));
-    print("reponse recue : ${response.statusCode}");
-    print(response);
 
     if (response.statusCode == 200) {
       final user = User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
       return user;
     } else {
-      print("status code recu : ${response.statusCode}");
       throw Exception('Failed to login');
     }
   }

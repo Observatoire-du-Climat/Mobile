@@ -29,7 +29,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
 
   Future<void> _onUserMeasureRequest(UserMeasureRequest request, Emitter<MeasureState> emit) async {
     emit(MeasuresLoading());
-    print('UserMeasureRequest asked !!');
 
     try {
       List<Measure> measures = await _measureRepository.getUserMeasures();
@@ -39,7 +38,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       }
       emit(MeasuresFetched(measures));
     } catch (e) {
-      print('Error : $e');
       emit(MeasuresError('La récupération des mesures a échoué'));
     }
   }
@@ -48,11 +46,9 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     emit(MeasureCreationLoading());
 
     try {
-      print("envoie de la mesure au provider");
       await _measureRepository.createTemperature(request.date, request.location, request.degree, request.picture);
       emit(MeasureCreated());
     } catch (e) {
-      print('Error : $e');
       emit(MeasureCreationError('La création a échoué'));
     }
   }
@@ -61,11 +57,9 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     emit(MeasureCreationLoading());
 
     try {
-      print("envoie de la mesure au provider");
       await _measureRepository.createSnowHeight(request.date, request.location, request.height, request.weather, request.precipitation, request.picture);
       emit(MeasureCreated());
     } catch(e) {
-      print('Error : $e');
       emit(MeasureCreationError('La création a échoué'));
     }
   }
@@ -74,11 +68,9 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     emit(MeasureCreationLoading());
 
     try {
-      print("envoie de la mesure au provider");
       await _measureRepository.createBirdMigration(request.date, request.location, request.specie, request.event, request.picture);
       emit(MeasureCreated());
     } catch(e) {
-      print('Error : $e');
       emit(MeasureCreationError('La création a échoué'));
     }
   }
@@ -87,11 +79,9 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     emit(MeasureCreationLoading());
 
     try {
-      print("envoie de la mesure au provider");
       await _measureRepository.createEggsLaying(request.date, request.location, request.number, request.picture);
       emit(MeasureCreated());
     } catch(e) {
-      print('Error : $e');
       emit(MeasureCreationError('La création a échoué'));
     }
   }
@@ -100,7 +90,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     emit(MeasureDetailsLoading());
 
     try {
-      print("envoie de la requête au provider");
       final measure = await _measureRepository.getSingleMeasure(request.measureId);
       switch (measure.type) {
         case MeasureType.temperature :
@@ -113,7 +102,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
           emit(EggsLayingDetailsFetched(measure as EggsLaying));
       }
     } catch (e) {
-      print('Error : $e');
       emit(MeasureDetailsError('La récupération des détails de la mesure a échoué'));
     }
   }
@@ -125,7 +113,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       await _measureRepository.updateTemperature(request.measureId, request.date, request.location, request.degree);
       emit(MeasureUpdated());
     } catch (e) {
-      print('Error : $e');
       emit (MeasureUpdateError('La modification a échoué'));
     }
   }
@@ -137,7 +124,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       await _measureRepository.updateSnowHeight(request.measureId, request.date, request.location, request.height, request.weather, request.precipitation);
       emit(MeasureUpdated());
     } catch (e) {
-      print('Error : $e');
       emit(MeasureUpdateError('La modification a échoué'));
     }
   }
@@ -149,7 +135,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       await _measureRepository.updateBirdMigration(request.measureId, request.date, request.location, request.specie, request.event);
       emit(MeasureUpdated());
     } catch (e) {
-      print('Error : $e');
       emit(MeasureUpdateError('La modification a échoué'));
     }
   }
@@ -161,7 +146,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       await _measureRepository.updateEggsLaying(request.measureId, request.date, request.location, request.number);
       emit(MeasureUpdated());
     } catch (e) {
-      print('Error : $e');
       emit(MeasureUpdateError('La modification a échoué'));
     }
   }
@@ -173,7 +157,6 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       await _measureRepository.deleteMeasure(request.measureId);
       emit(MeasureDeleted());
     } catch (e) {
-      print('Error : $e');
       emit(MeasureDeleteError('La suppression de la mesure a échoué'));
     }
   }

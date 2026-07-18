@@ -34,11 +34,9 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (state is UserConnected) {
-            print("Utilisateur connecté");
             Navigator.pushReplacementNamed(context, '/measure');
           }
           if (state is UserError) {
-            print("Erreur de connexion");
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },

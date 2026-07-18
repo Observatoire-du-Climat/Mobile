@@ -20,30 +20,23 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
 
   Future<void> _onRegister(RegisterRequest request, Emitter<UserState> emit) async {
-    print("appel a onRegister dans bloc");
     emit(UserLoading());
 
     try {
       final User user = await _userRepository.createUser(request.name, request.email, request.password);
-      print("compte créé");
       emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
-      print("création ratée");
       emit(UserError('La création du compte a échoué'));
     }
   }
 
   Future<void> _onLogin(LoginRequest request, Emitter<UserState> emit) async {
-    print("appel a onLogin dans le bloc");
     emit(UserLoading());
 
     try {
       final User user = await _userRepository.loginUser(request.email, request.password);
-      print("user connecté");
       emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
-      print("Login ratééééé");
-      print('Exception : $e');
       emit(UserError("L'authentification a échoué"));
     }
   }
@@ -55,7 +48,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       final User user = await _userRepository.getCurrentUser();
       emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
-      print('Error : $e');
       emit(UserError('La récupération du compte a échoué'));
     }
   }
@@ -73,7 +65,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserUpdated());
       emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
-      print('Error : $e');
       emit(UserError('La modification du compte a échoué'));
     }
   }

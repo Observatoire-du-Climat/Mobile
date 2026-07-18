@@ -36,11 +36,9 @@ class _RegisterPageState extends State<RegisterPage> {
       listener: (context, state) {
 
         if (state is UserConnected) {
-          print("Utilisateur connecté");
           Navigator.pushReplacementNamed(context, '/measure');
         }
         if (state is UserError) {
-          print("Erreur de creation");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
         }
 
