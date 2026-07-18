@@ -92,7 +92,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                 );
                               }
                               return Center(
-                                child: Text('Etat : ${state.runtimeType}'),
+                                child: Text('Veuillez recharger la page'),
                               );
                             },
                           ),

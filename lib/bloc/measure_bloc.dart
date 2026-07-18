@@ -40,7 +40,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasuresFetched(measures));
     } catch (e) {
       print('Error : $e');
-      emit(MeasuresError('Failed to fetch Measures'));
+      emit(MeasuresError('La récupération des mesures a échoué'));
     }
   }
 
@@ -53,7 +53,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureCreated());
     } catch (e) {
       print('Error : $e');
-      emit(MeasureCreationError('Failed to create Temperature Measure'));
+      emit(MeasureCreationError('La création a échoué'));
     }
   }
 
@@ -66,7 +66,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureCreated());
     } catch(e) {
       print('Error : $e');
-      emit(MeasureCreationError('Failed to create SnowHeight Measure'));
+      emit(MeasureCreationError('La création a échoué'));
     }
   }
 
@@ -79,7 +79,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureCreated());
     } catch(e) {
       print('Error : $e');
-      emit(MeasureCreationError('Failed to create BirdMigration Measure'));
+      emit(MeasureCreationError('La création a échoué'));
     }
   }
 
@@ -92,7 +92,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureCreated());
     } catch(e) {
       print('Error : $e');
-      emit(MeasureCreationError('Failed to create EggsLaying Measure'));
+      emit(MeasureCreationError('La création a échoué'));
     }
   }
 
@@ -114,7 +114,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       }
     } catch (e) {
       print('Error : $e');
-      emit(MeasureDetailsError('Failed to fetch measure'));
+      emit(MeasureDetailsError('La récupération des détails de la mesure a échoué'));
     }
   }
 
@@ -126,7 +126,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureUpdated());
     } catch (e) {
       print('Error : $e');
-      emit (MeasureUpdateError('Failed to update Temperature Measure'));
+      emit (MeasureUpdateError('La modification a échoué'));
     }
   }
 
@@ -138,7 +138,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureUpdated());
     } catch (e) {
       print('Error : $e');
-      emit(MeasureUpdateError('Failed to update SnowHeight Measure'));
+      emit(MeasureUpdateError('La modification a échoué'));
     }
   }
 
@@ -150,7 +150,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureUpdated());
     } catch (e) {
       print('Error : $e');
-      emit(MeasureUpdateError('Failed to update BirdMigration measure'));
+      emit(MeasureUpdateError('La modification a échoué'));
     }
   }
 
@@ -162,7 +162,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureUpdated());
     } catch (e) {
       print('Error : $e');
-      emit(MeasureUpdateError('Failed to update EggsLaying measure'));
+      emit(MeasureUpdateError('La modification a échoué'));
     }
   }
 
@@ -174,7 +174,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
       emit(MeasureDeleted());
     } catch (e) {
       print('Error : $e');
-      emit(MeasureDeleteError('Failed to delete measure'));
+      emit(MeasureDeleteError('La suppression de la mesure a échoué'));
     }
   }
 }

@@ -58,7 +58,7 @@ class _MeasureDetailsPageState extends State<MeasureDetailsPage> {
 
                       if (state is MeasureDetailsError) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Error")),
+                          const SnackBar(content: Text('Erreur de récupération de la mesure')),
                         );
                       }
 

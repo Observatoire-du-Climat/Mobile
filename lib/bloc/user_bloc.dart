@@ -29,7 +29,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
       print("création ratée");
-      emit(UserError('Creation de compte ratée'));
+      emit(UserError('La création du compte a échoué'));
     }
   }
 
@@ -44,7 +44,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } catch (e) {
       print("Login ratééééé");
       print('Exception : $e');
-      emit(UserError('Login raté'));
+      emit(UserError("L'authentification a échoué"));
     }
   }
 
@@ -56,7 +56,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
       print('Error : $e');
-      emit(UserError('UserRequest raté'));
+      emit(UserError('La récupération du compte a échoué'));
     }
   }
 
@@ -74,7 +74,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       emit(UserConnected(name: user.name, email: user.email, isValid: user.isValid));
     } catch (e) {
       print('Error : $e');
-      emit(UserError('Failed to update user'));
+      emit(UserError('La modification du compte a échoué'));
     }
   }
 }
