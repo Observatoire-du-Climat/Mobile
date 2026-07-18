@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:mobile/app_theme.dart';
 import 'package:mobile/bloc/measure_bloc.dart';
@@ -25,17 +28,37 @@ import 'package:mobile/web_providers/measure_provider.dart';
 import 'package:mobile/web_providers/user_provider.dart';
 
 Future<void> main() async {
-  await dotenv.load(fileName: '.env');
-  print("env");
-  print(dotenv.env['BASE_API_URL']);
 
+  //.env file initialization
+  await dotenv.load(fileName: '.env');
+
+  //SecureStorage initialization
   final storage = SecureStorage();
 
+  //Provider and repository initialization
   final userProvider = UserProvider(storage, http.Client());
   final userRepository = UserRepository(userProvider);
-
   final measureProvider = MeasureProvider(storage, http.Client());
   final measureRepository = MeasureRepository(measureProvider);
+
+  //Firebase initialization
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(provisional: true);
+  print('User granted permission: ${settings.authorizationStatus}');
+  final token = await messaging.getToken();
+  print('Token : $token');
+  //Subscribe to topic to get the notifications
+  await messaging.subscribeToTopic("all-users");
+  //Background notifications handler, can't be in a class
+  @pragma('vm:entry-point')
+  Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    await Firebase.initializeApp();
+  }
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
 
   runApp(MyApp(userRepository: userRepository, measureRepository: measureRepository,));

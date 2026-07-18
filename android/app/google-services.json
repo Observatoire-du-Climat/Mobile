@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "813553768866",
+    "project_id": "observatoire-citoyen-du-climat",
+    "storage_bucket": "observatoire-citoyen-du-climat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813553768866:android:eb73cc18bce0d196947afb",
+        "android_client_info": {
+          "package_name": "com.example.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByITDjEDbWnTuTfr_e2kvvRoPg0U-D1Ko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
