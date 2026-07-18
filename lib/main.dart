@@ -47,7 +47,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform
   );
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission(provisional: true, sound: true);
+  await messaging.requestPermission(provisional: true, sound: true);
   //Subscribe to topic to get the notifications
   await messaging.subscribeToTopic("all-users");
   //Background notifications handler, can't be in a class
