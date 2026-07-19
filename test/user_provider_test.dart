@@ -39,7 +39,7 @@ void main() {
         ),
       ).thenAnswer(
             (_) async => http.Response(
-          '{"id":1,"name":"David","email":"test@test.ch"}',
+          '{"id":1,"name":"David","email":"test@test.ch", "isValid":false}',
           201,
         ),
       );
@@ -85,7 +85,7 @@ void main() {
         ),
       ).thenAnswer(
             (_) async => http.Response(
-          '{"id":1,"name":"David","email":"test@test.ch"}',
+          '{"id":1,"name":"David","email":"test@test.ch", "isValid":false}',
           200,
         ),
       );

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile/models/measure.dart';
 import 'package:mobile/models/temperature.dart';
 import 'package:mobile/utils/secure_storage.dart';
 import 'package:mockito/annotations.dart';
@@ -35,7 +34,7 @@ void main() {
   });
 
   group('getUserMeasures', () {
-    test('returns user measures when request succeeds', () async {
+    test('getUserMeasures successful', () async {
       when(storage.getUserId())
           .thenAnswer((_) async => '1');
 
@@ -77,7 +76,7 @@ void main() {
       ).called(1);
     });
 
-    test('throws an exception when no user is connected', () async {
+    test('getUserMeasures, no user connected', () async {
       when(storage.getUserId())
           .thenAnswer((_) async => null);
 
@@ -93,7 +92,7 @@ void main() {
       );
     });
 
-    test('throws an exception when loading measures fails', () async {
+    test('getUserMeasures, retrieval failed', () async {
       when(storage.getUserId())
           .thenAnswer((_) async => '1');
 
@@ -113,12 +112,12 @@ void main() {
         throwsException,
       );
 
-      //verify(mockClient.get(Uri.parse('$baseUrl/measures/user/1'),),).called(1);
+      verifyNever(mockClient.get(Uri.parse('$baseUrl/measures/user/1')));
     });
   });
 
   group('createTemperature', () {
-    test('returns a temperature when creation succeeds', () async {
+    test('createTemperature successful', () async {
       when(storage.getUserId())
           .thenAnswer((_) async => '1');
 
@@ -152,7 +151,7 @@ void main() {
       verify(mockClient.send(any)).called(1);
     });
 
-    test('throws an exception when no user is connected', () async {
+    test('createTemperature, no user connected', () async {
       when(storage.getUserId())
           .thenAnswer((_) async => null);
 
@@ -169,7 +168,7 @@ void main() {
       verifyNever(mockClient.send(any));
     });
 
-    test('throws an exception when server returns an error', () async {
+    test('CreateTemperature, user is not valid', () async {
       when(storage.getUserId())
           .thenAnswer((_) async => '1');
 
@@ -191,12 +190,12 @@ void main() {
         throwsException,
       );
 
-      //verify(mockClient.send(any)).called(1);
+      verifyNever(mockClient.send(any));
     });
   });
 
   group('updateTemperature', () {
-    test('returns the updated temperature when update succeeds', () async {
+    test('updateTemperature successful', () async {
       when(storage.getUserId())
           .thenAnswer((_) async => '1');
 
@@ -244,7 +243,7 @@ void main() {
       ).called(1);
     });
 
-    test('throws an exception when update fails', () async {
+    test('updateTemperature, update failed', () async {
       when(mockClient.send(any)).thenAnswer(
             (_) async => http.StreamedResponse(
           Stream.value(
@@ -264,12 +263,12 @@ void main() {
         throwsException,
       );
 
-      //verify(mockClient.send(any)).called(1);
+      verifyNever(mockClient.send(any));
     });
   });
 
   group('deleteMeasure', () {
-    test('completes when deletion succeeds', () async {
+    test('deleteMeasure successful', () async {
       when(
         mockClient.delete(
           Uri.parse('$baseUrl/measures/10'),
@@ -290,7 +289,7 @@ void main() {
       ).called(1);
     });
 
-    test('throws an exception when deletion fails', () async {
+    test('deleteTemperature error', () async {
       when(
         mockClient.delete(
           Uri.parse('$baseUrl/measures/10'),
@@ -307,7 +306,7 @@ void main() {
         throwsException,
       );
 
-      //verify(mockClient.delete(Uri.parse('$baseUrl/measures/10'),),).called(1);
+      verify(mockClient.delete(Uri.parse('$baseUrl/measures/10'),),).called(1);
     });
   });
 
