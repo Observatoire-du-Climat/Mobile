@@ -9,6 +9,9 @@ import '../../app_theme.dart';
 import '../widgets/history_card.dart';
 import '../widgets/nav_bar.dart';
 
+/// Displays the measure history page of the connected user.
+///
+/// It contains a [HistoryCard] for each measure the user has submitted.
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 

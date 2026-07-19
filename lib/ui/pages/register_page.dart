@@ -8,6 +8,9 @@ import 'package:mobile/ui/widgets/user_input.dart';
 import '../../app_theme.dart';
 import '../widgets/large_action_button.dart';
 
+/// Display the register page of the application.
+///
+/// It contains a form that ask for the user name, email and password.
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 

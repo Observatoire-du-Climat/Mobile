@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../app_theme.dart';
 
+/// Enumeration of the 3 different "main" page of the application.
 enum NavItem { measure, history, profile }
 
+/// Displays the navigation bar of the application.
 class NavBar extends StatelessWidget {
   final NavItem current;
 
@@ -12,7 +14,6 @@ class NavBar extends StatelessWidget {
   });
 
   void _onTap(BuildContext context, NavItem item) {
-    //if (item == current) return;
 
     switch (item) {
       case NavItem.measure:
@@ -63,6 +64,7 @@ class NavBar extends StatelessWidget {
   }
 }
 
+/// Display an item inside the navigation bar.
 class _NavBarItem extends StatelessWidget {
   final IconData icon;
   final String label;

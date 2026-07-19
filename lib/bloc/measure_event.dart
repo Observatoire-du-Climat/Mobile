@@ -4,10 +4,13 @@ import 'package:mobile/models/enum/bird_event_type.dart';
 import 'package:mobile/models/enum/bird_specie.dart';
 import 'package:mobile/models/enum/weather_type.dart';
 
+/// Base class for all measure-related events
 abstract class MeasureEvent {}
 
+/// Requests all measure submitted by the connected user.
 class UserMeasureRequest extends MeasureEvent {}
 
+/// Requests the creation of a temperature measure.
 class CreateTemperatureRequest extends MeasureEvent {
   final DateTime date;
   final String location;
@@ -22,6 +25,7 @@ class CreateTemperatureRequest extends MeasureEvent {
   });
 }
 
+/// Requests the creation of a snow height measure.
 class CreateSnowHeightRequest extends MeasureEvent {
   final DateTime date;
   final String location;
@@ -40,6 +44,7 @@ class CreateSnowHeightRequest extends MeasureEvent {
   });
 }
 
+/// Requests the creation of a bird migration measure.
 class CreateBirdMigrationRequest extends MeasureEvent {
   final DateTime date;
   final String location;
@@ -56,6 +61,7 @@ class CreateBirdMigrationRequest extends MeasureEvent {
   });
 }
 
+/// Requests the creation of a eggs laying measure.
 class CreateEggsLayingRequest extends MeasureEvent {
   final DateTime date;
   final String location;
@@ -70,7 +76,7 @@ class CreateEggsLayingRequest extends MeasureEvent {
   });
 }
 
-
+/// Requests a specific measure.
 class MeasureDetailsRequest extends MeasureEvent {
   final int measureId;
 
@@ -79,6 +85,7 @@ class MeasureDetailsRequest extends MeasureEvent {
   });
 }
 
+/// Requests the update of a temperature measure.
 class UpdateTemperatureRequest extends MeasureEvent {
   final int measureId;
   final DateTime date;
@@ -93,6 +100,7 @@ class UpdateTemperatureRequest extends MeasureEvent {
   });
 }
 
+/// Requests the update of a snow height measure.
 class UpdateSnowHeightRequest extends MeasureEvent {
   final int measureId;
   final DateTime date;
@@ -111,6 +119,7 @@ class UpdateSnowHeightRequest extends MeasureEvent {
   });
 }
 
+/// Requests the update of a bird migration measure.
 class UpdateBirdMigrationRequest extends MeasureEvent {
   final int measureId;
   final DateTime date;
@@ -127,6 +136,7 @@ class UpdateBirdMigrationRequest extends MeasureEvent {
   });
 }
 
+/// Requests the update of a eggs laying measure.
 class UpdateEggsLayingRequest extends MeasureEvent {
   final int measureId;
   final DateTime date;
@@ -141,6 +151,7 @@ class UpdateEggsLayingRequest extends MeasureEvent {
   });
 }
 
+/// Requests the deletion of a measure.
 class DeleteMeasureRequest extends MeasureEvent {
   final int measureId;
 

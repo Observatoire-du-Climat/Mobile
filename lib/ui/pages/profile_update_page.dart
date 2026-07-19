@@ -9,6 +9,7 @@ import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/user_input.dart';
 
+/// Display a form page to update the current connected user data.
 class ProfileUpdatePage extends StatefulWidget {
   const ProfileUpdatePage({
     super.key,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../app_theme.dart';
 
+/// Display a large action button in the base, register and login page.
 class LargeActionButton extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;

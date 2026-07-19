@@ -18,7 +18,10 @@ import 'package:mobile/models/snow_height.dart';
 import 'package:mobile/models/temperature.dart';
 import 'package:mobile/utils/secure_storage.dart';
 
-
+/// Provides remote access to measurement-related API endpoints.
+///
+/// This provider communicate with the web server to retrieve, create, update or delete
+/// climate measures.
 class MeasureProvider {
 
   final apiUrl = dotenv.env['BASE_API_URL'];
@@ -28,6 +31,9 @@ class MeasureProvider {
   
   MeasureProvider(this.storage, this.client);
 
+  /// Send a multipart request containing the measure data and its associated picture (optional)
+  ///
+  /// Returns the HTTP Response received by the web server
   Future<http.Response> sendMultipart(String endpoint, Map<String, dynamic> jsonObject, File? picture) async {
 
     final request = http.MultipartRequest('POST', Uri.parse('$apiUrl/measures/$endpoint'));
@@ -42,7 +48,11 @@ class MeasureProvider {
     final response = await request.send();
     return http.Response.fromStream(response);
   }
-  
+
+  /// Retrieves all measure submitted by the connected user
+  ///
+  /// Returns a list with all retrieved measure as [Measure] with their global data
+  /// Throws [Exception] if no user is connected or if the backend request fails
   Future<List<Measure>> getUserMeasures() async {
     final String? userId = await storage.getUserId();
     if (userId == null) {
@@ -62,6 +72,11 @@ class MeasureProvider {
     }
   }
 
+  /// Retrieves a single measure in its specific type
+  ///
+  /// Returns the retrieved measure as its specific type
+  ///
+  /// Throws an [Exception] if no user is connected or if the backend request fails
   Future getSingleMeasure(int id) async {
 
     final response = await http.get(Uri.parse('$apiUrl/measures/$id'));
@@ -85,6 +100,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a temperature measure with an optional picture.
+  ///
+  /// Returns the newly created [Temperature].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<Temperature> createTemperature(DateTime date, String location, int degree, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -112,6 +131,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a snow height measure with an optional picture.
+  ///
+  /// Returns the newly created [SnowHeight].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -141,6 +164,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a bird migration measure with an optional picture.
+  ///
+  /// Returns the newly created [BirdMigration].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<BirdMigration> createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -169,6 +196,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a eggs laying measure with an optional picture.
+  ///
+  /// Returns the newly created [EggsLaying].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<EggsLaying> createEggsLaying(DateTime date, String location, int number, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -196,6 +227,10 @@ class MeasureProvider {
     }
   }
 
+  /// Update a temperature measure.
+  ///
+  /// Returns the updated [Temperature].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<Temperature> updateTemperature(int measureId, DateTime date, String location, int degree) async {
     try {
       final String? userId = await storage.getUserId();
@@ -227,6 +262,10 @@ class MeasureProvider {
     }
   }
 
+  /// Update a snow height measure.
+  ///
+  /// Returns the updated [SnowHeight].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<SnowHeight> updateSnowHeight(int measureId, DateTime date, String location, int height, WeatherType weather, int precipitation) async {
     try {
       final String? userId = await storage.getUserId();
@@ -259,6 +298,10 @@ class MeasureProvider {
     }
   }
 
+  /// Update a bird migration measure.
+  ///
+  /// Returns the updated [BirdMigration].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<BirdMigration> updateBirdMigration(int measureId, DateTime date, String location, BirdSpecie specie, BirdEventType event) async {
     try {
       final String? userId = await storage.getUserId();
@@ -290,6 +333,10 @@ class MeasureProvider {
     }
   }
 
+  /// Update a eggs laying measure.
+  ///
+  /// Returns the updated [EggsLaying].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<EggsLaying> updateEggsLaying(int measureId, DateTime date, String location, int number) async {
     try {
       final String? userId = await storage.getUserId();
@@ -320,6 +367,9 @@ class MeasureProvider {
     }
   }
 
+  /// Delete a measure.
+  ///
+  /// Throws an [Exception] if the delete fails.
   Future<void> deleteMeasure(int measureId) async {
     try {
       final response = await http.delete(

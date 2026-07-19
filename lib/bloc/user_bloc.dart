@@ -6,10 +6,14 @@ import 'package:mobile/bloc/user_state.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/repositories/user_repository.dart';
 
+/// Handles user-related events and application states.
+///
+/// This BLoC coordinates user retrieval, creation, authentication and update through the [UserRepository].
 class UserBloc extends Bloc<UserEvent, UserState> {
 
   final UserRepository _userRepository;
 
+  /// Creates a user BLoC and registers all supported event handlers.
   UserBloc(this._userRepository) : super(UserNotConnected()) {
     on<RegisterRequest>(_onRegister);
     on<LoginRequest>(_onLogin);
@@ -18,7 +22,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UserUpdateRequest>(_onUserUpdateRequest);
   }
 
-
+  /// Handles the registration of a new user.
   Future<void> _onRegister(RegisterRequest request, Emitter<UserState> emit) async {
     emit(UserLoading());
 
@@ -30,6 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
+  /// Handles the authentication of a user.
   Future<void> _onLogin(LoginRequest request, Emitter<UserState> emit) async {
     emit(UserLoading());
 
@@ -41,6 +46,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
+  /// Handles the retrieval of the current user data.
   Future<void> _onUserRequest(UserRequest request, Emitter<UserState> emit) async {
     emit(UserLoading());
 
@@ -52,12 +58,14 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
+  /// Handles the log out of the current user.
   Future<void> _onLogoutRequest(LogoutRequest request, Emitter<UserState> emit) async {
     emit(UserDisconnected());
     await _userRepository.logout();
     emit(UserNotConnected());
   }
 
+  /// Handles the update of the current user data.
   Future<void> _onUserUpdateRequest(UserUpdateRequest request, Emitter<UserState> emit) async {
     emit(UserLoading());
     try {

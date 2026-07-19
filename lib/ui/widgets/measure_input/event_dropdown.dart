@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import '../../../app_theme.dart';
 import '../../../models/enum/bird_event_type.dart';
 
+/// Display the dropdown selection for the event value for a bird migration measure creation or update.
 class EventDropdown extends StatelessWidget {
   final BirdEventType selected;
   final ValueChanged<BirdEventType?> onChanged;

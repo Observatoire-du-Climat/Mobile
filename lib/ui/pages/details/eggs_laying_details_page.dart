@@ -12,6 +12,9 @@ import '../../../utils/date_picker_helper.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/measure_picture.dart';
 
+/// Display the eggs laying measure details page.
+///
+/// It contains all the value of a eggs laying measure and the possibility to update or delete it.
 class EggsLayingDetailsPage extends StatefulWidget {
   final EggsLaying measure;
 

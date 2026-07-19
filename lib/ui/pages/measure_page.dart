@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 
+/// Display the "main" measure page of the application.
+///
+/// It contains a button to redirect to each available measure type creation form.
 class MeasurePage extends StatelessWidget {
   const MeasurePage({super.key});
 

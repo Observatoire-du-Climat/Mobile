@@ -8,6 +8,9 @@ import '../../app_theme.dart';
 import '../../models/measure.dart';
 import 'measure_action_button.dart';
 
+/// Display a card containing a single measure basic information.
+///
+/// It contains the measure date, type and a "details" button.
 class HistoryCard extends StatelessWidget {
 
   final Measure item;

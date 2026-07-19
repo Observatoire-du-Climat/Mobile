@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Display a User input bar.
 class UserInput extends StatelessWidget {
   final String label;
   final TextEditingController controller;

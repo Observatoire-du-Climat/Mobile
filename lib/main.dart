@@ -27,6 +27,13 @@ import 'package:mobile/ui/pages/register_page.dart';
 import 'package:mobile/web_providers/measure_provider.dart';
 import 'package:mobile/web_providers/user_provider.dart';
 
+//Background notifications handler, can't be in a class, must be a top-level function
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
+/// Initializes the dependencies and start the application.
 Future<void> main() async {
 
   //.env file initialization
@@ -50,17 +57,16 @@ Future<void> main() async {
   await messaging.requestPermission(provisional: true, sound: true);
   //Subscribe to topic to get the notifications
   await messaging.subscribeToTopic("all-users");
-  //Background notifications handler, can't be in a class
-  @pragma('vm:entry-point')
-  Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp();
-  }
+
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
 
   runApp(MyApp(userRepository: userRepository, measureRepository: measureRepository,));
 }
 
+/// Root widget of the application.
+///
+/// Provides the BLoC, theme and navigation routes.
 class MyApp extends StatelessWidget {
 
   final UserRepository userRepository;
@@ -101,18 +107,8 @@ class MyApp extends StatelessWidget {
             '/measure-details' : (context) => const MeasureDetailsPage(),
             '/profile-update' : (context) => const ProfileUpdatePage()
           },
-          home: Scaffold(
-              body: StartPage()
-          ),
+          home: HomePage(),
         )
       );
-  }
-}
-
-class StartPage extends StatelessWidget {
-  const StartPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return HomePage();
   }
 }

@@ -8,6 +8,7 @@ import 'package:mobile/ui/widgets/large_action_button.dart';
 import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 
+/// Display the profile page of the currently connected user.
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 

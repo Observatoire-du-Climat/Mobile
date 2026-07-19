@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../app_theme.dart';
 
+/// Display an action button at the bottom of a measure creation or update.
 class MeasureActionButton extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;

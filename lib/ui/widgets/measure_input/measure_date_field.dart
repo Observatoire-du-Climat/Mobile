@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_text_field.dart';
 
+/// Display a Date input for a measure creation or update.
 class MeasureDateField extends StatelessWidget {
   final String label;
   final TextEditingController controller;

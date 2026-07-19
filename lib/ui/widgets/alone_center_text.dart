@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../app_theme.dart';
 
+/// Display a information text in the middle of the screen when something is loading or an error occurred.
 class AloneCenterText extends StatelessWidget {
 
   final String label;

@@ -9,10 +9,14 @@ import 'package:mobile/models/snow_height.dart';
 import 'package:mobile/models/temperature.dart';
 import 'package:mobile/repositories/measure_repository.dart';
 
+/// Handles measurement-related events and application states.
+///
+/// This BLoC coordinates measure retrieval, creation, update and suppression through the [MeasureRepository].
 class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
 
   final MeasureRepository _measureRepository;
 
+  /// Creates a measurement BLoC and registers all supported event handlers.
   MeasureBloc(this._measureRepository) : super(MeasuresNotFetched()) {
     on<UserMeasureRequest>(_onUserMeasureRequest);
     on<CreateTemperatureRequest>(_onCreateTemperatureRequest);
@@ -27,6 +31,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     on<DeleteMeasureRequest>(_onDeleteMeasureRequest);
   }
 
+  /// Handles the retrieval of all the measures submitted by the current user.
   Future<void> _onUserMeasureRequest(UserMeasureRequest request, Emitter<MeasureState> emit) async {
     emit(MeasuresLoading());
 
@@ -42,6 +47,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the creation of a temperature measure.
   Future<void> _onCreateTemperatureRequest(CreateTemperatureRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureCreationLoading());
 
@@ -53,6 +59,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the creation of a snow height measure.
   Future<void> _onCreateSnowHeightRequest(CreateSnowHeightRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureCreationLoading());
 
@@ -64,6 +71,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the creation of a bird migration measure.
   Future<void> _onCreateBirdMigrationRequest(CreateBirdMigrationRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureCreationLoading());
 
@@ -75,6 +83,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the creation of a eggs laying measure.
   Future<void> _onCreateEggsLayingRequest(CreateEggsLayingRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureCreationLoading());
 
@@ -86,6 +95,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the retrieval of a single measure in details.
   Future<void> _onMeasureDetailsRequest(MeasureDetailsRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureDetailsLoading());
 
@@ -106,6 +116,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the update of a temperature measure.
   Future<void> _onUpdateTemperatureRequest(UpdateTemperatureRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureUpdateLoading());
 
@@ -117,6 +128,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the update of a snow height measure.
   Future<void> _onUpdateSnowHeightRequest(UpdateSnowHeightRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureUpdateLoading());
 
@@ -128,6 +140,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the update of a bird migration measure.
   Future<void> _onUpdateBirdMigrationRequest(UpdateBirdMigrationRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureUpdateLoading());
 
@@ -139,6 +152,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the update of a eggs laying measure.
   Future<void> _onUpdateEggsLaying(UpdateEggsLayingRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureUpdateLoading());
 
@@ -150,6 +164,7 @@ class MeasureBloc extends Bloc<MeasureEvent, MeasureState> {
     }
   }
 
+  /// Handles the deletion of a measure.
   Future<void> _onDeleteMeasureRequest(DeleteMeasureRequest request, Emitter<MeasureState> emit) async {
     emit(MeasureDeleteLoading());
 

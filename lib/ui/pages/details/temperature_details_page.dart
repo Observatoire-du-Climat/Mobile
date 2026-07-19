@@ -12,6 +12,9 @@ import '../../../utils/date_picker_helper.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/measure_input/measure_text_field.dart';
 
+/// Display the temperature measure details page.
+///
+/// It contains all the value of a temperature measure and the possibility to update or delete it.
 class TemperatureDetailsPage extends StatefulWidget {
   final Temperature measure;
   const TemperatureDetailsPage({

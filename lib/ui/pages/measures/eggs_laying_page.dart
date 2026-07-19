@@ -16,6 +16,10 @@ import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 
+
+/// Display the eggs laying measure page creation.
+///
+/// It contains form containing all the eggs laying details to submit and information about this measure type.
 class EggsLayingPage extends StatefulWidget {
   const EggsLayingPage({super.key});
 

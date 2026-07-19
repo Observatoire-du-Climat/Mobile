@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import '../app_theme.dart';
 
+/// Helper class providing the date picker for measure creation and update.
 class DatePickerHelper {
+
+  DatePickerHelper._(); // private constructor since its a helper class
+
+  /// Display a date picker
+  ///
+  /// Returns the selected date or null if the operation is cancelled.
   static Future<DateTime?> pickDate(
       BuildContext context, {
         DateTime? initialDate,

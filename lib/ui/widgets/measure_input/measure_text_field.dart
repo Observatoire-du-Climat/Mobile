@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../app_theme.dart';
 
-
+/// Display a text input for a measure creation or update.
 class MeasureTextField extends StatelessWidget {
   final String label;
   final TextEditingController controller;

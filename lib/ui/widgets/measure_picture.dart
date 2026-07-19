@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+/// Displays the picture associated with a measure.
+///
+/// While the image is loading, a loading message is displayed.
+/// If no picture is available or the request fails, a fallback message is shown.
 class MeasurePicture extends StatelessWidget {
   final int measureId;
   final double height;
