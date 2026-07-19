@@ -51,6 +51,8 @@ Create a `.env` file at the root of the project containing the backend URL:
 
 ```
 BASE_API_URL=${URL}
+
+example : BASE_API_URL=0.0.0.0:8080/api
 ```
 
 If you are using the web server locally in development mode, you will need to put your IP v4 address.
@@ -69,7 +71,7 @@ Run the application:
 flutter run
 ```
 
-Run the test suite:
+Run the test:
 
 ```bash
 flutter test

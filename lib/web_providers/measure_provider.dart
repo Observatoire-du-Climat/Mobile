@@ -45,7 +45,7 @@ class MeasureProvider {
         await http.MultipartFile.fromPath('picture', picture.path)
       );
     }
-    final response = await request.send();
+    final response = await client.send(request);
     return http.Response.fromStream(response);
   }
 
@@ -59,10 +59,9 @@ class MeasureProvider {
       throw Exception('No user connected');
     }
     
-    final response = await http.get(Uri.parse('$apiUrl/measures/user/$userId'));
+    final response = await client.get(Uri.parse('$apiUrl/measures/user/$userId'));
 
     if (response.statusCode == 200) {
-      //return json.decode(response.body).map((m) => Measure.fromJson(m)).toList();
       final List<dynamic> decoded = jsonDecode(response.body);
       return decoded
           .map((m) => Measure.fromJson(m as Map<String, dynamic>))
@@ -79,7 +78,7 @@ class MeasureProvider {
   /// Throws an [Exception] if no user is connected or if the backend request fails
   Future getSingleMeasure(int id) async {
 
-    final response = await http.get(Uri.parse('$apiUrl/measures/$id'));
+    final response = await client.get(Uri.parse('$apiUrl/measures/$id'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> body = jsonDecode(response.body) as Map<String, dynamic>;
@@ -238,7 +237,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/temperature/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -273,7 +272,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/snow-height/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -309,7 +308,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/bird-migration/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -344,7 +343,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/eggs-laying/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -372,7 +371,7 @@ class MeasureProvider {
   /// Throws an [Exception] if the delete fails.
   Future<void> deleteMeasure(int measureId) async {
     try {
-      final response = await http.delete(
+      final response = await client.delete(
           Uri.parse('$apiUrl/measures/$measureId')
       ).timeout(Duration(seconds: 10));
 
