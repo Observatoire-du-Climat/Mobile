@@ -88,6 +88,8 @@ class MeasureDetailsError extends MeasureState {
   MeasureDetailsError(this.message);
 }
 
+// UPDATE MEASURE
+
 /// Indicates that a measure data update is currently loading.
 class MeasureUpdateLoading extends MeasureState {}
 
@@ -100,6 +102,8 @@ class MeasureUpdateError extends MeasureState {
 
   MeasureUpdateError(this.message);
 }
+
+// DELETE MEASURE
 
 /// Indicates that a measure is currently being deleted.
 class MeasureDeleteLoading extends MeasureState {}
