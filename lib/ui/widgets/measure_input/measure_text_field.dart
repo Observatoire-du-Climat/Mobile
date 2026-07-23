@@ -17,7 +17,7 @@ class MeasureTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.keyboardType = TextInputType.text,
-    this.titleWidth = 70
+    this.titleWidth = 80
   });
 
   @override

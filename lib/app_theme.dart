@@ -35,7 +35,7 @@ class AppTheme {
           color : AppColors.forestGreen
         ),
         bodyMedium: TextStyle(
-          fontSize: 14,
+          fontSize: 18,
           color: Colors.black
         )
       )
