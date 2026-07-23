@@ -8,6 +8,7 @@ class MeasureTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final VoidCallback? onTap;
   final bool readOnly;
+  final double titleWidth;
 
   const MeasureTextField({
     super.key,
@@ -16,6 +17,7 @@ class MeasureTextField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.keyboardType = TextInputType.text,
+    this.titleWidth = 70
   });
 
   @override
@@ -25,7 +27,7 @@ class MeasureTextField extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 70,
+            width: titleWidth,
             child: Text(
               "$label :",
               style: Theme.of(context).textTheme.bodyMedium,

@@ -163,7 +163,7 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
                                     });
                                   },
                                 ),
-                                MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController, keyboardType: TextInputType.number,),
+                                MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController, keyboardType: TextInputType.number, titleWidth: 130,),
 
                                 const SizedBox(height: 24),
 

@@ -145,7 +145,7 @@ class _EggsLayingPageState extends State<EggsLayingPage> {
                                 const SizedBox(height: 32),
                                 MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
                                 MeasureTextField(label: "Lieu", controller: _locationController,),
-                                MeasureTextField(label: "Nombre de pontes", controller: _numberController, keyboardType: TextInputType.number,),
+                                MeasureTextField(label: "Nombre de pontes", controller: _numberController, keyboardType: TextInputType.number, titleWidth: 130,),
                                 const SizedBox(height: 24),
 
                                 if (_selectedPicture != null) Text(' Image ajoutée !'),
