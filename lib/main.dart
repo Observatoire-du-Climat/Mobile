@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -50,6 +51,12 @@ Future<void> main() async {
 
   //Firebase initialization
   WidgetsFlutterBinding.ensureInitialized();
+  //to not rotate the phone
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
+  //Firebase initialization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );

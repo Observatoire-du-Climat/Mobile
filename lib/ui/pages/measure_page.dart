@@ -2,11 +2,25 @@ import 'package:flutter/material.dart';
 import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 /// Display the "main" measure page of the application.
 ///
 /// It contains a button to redirect to each available measure type creation form.
 class MeasurePage extends StatelessWidget {
   const MeasurePage({super.key});
+
+  Future<void> _openPhaenonetWebsite() async {
+    final Uri url = Uri.parse(
+      'https://app.phaenonet.ch/map',
+    );
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +88,7 @@ class MeasurePage extends StatelessWidget {
                         label: "Phénologie végétale",
                         imagePath: "assets/images/FB_picto-Phenologie.png",
                         onPressed: (){
-                          Navigator.pushNamed(context, '/phenologie');
+                          _openPhaenonetWebsite();
                         },
                       ),
                     ],
