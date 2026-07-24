@@ -9,6 +9,7 @@ import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/user_input.dart';
 
+/// Display a form page to update the current connected user data.
 class ProfileUpdatePage extends StatefulWidget {
   const ProfileUpdatePage({
     super.key,
@@ -69,7 +70,7 @@ class _ProfileUpdatePageState extends State<ProfileUpdatePage> {
                             child: Column(
                                 children: [
                                   Text(
-                                    "Modification du profile",
+                                    "Modification du profil",
                                     style: Theme.of(context).textTheme.titleMedium,
                                   ),
                                   const SizedBox(height: 6),

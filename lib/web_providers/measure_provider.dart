@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +18,10 @@ import 'package:mobile/models/snow_height.dart';
 import 'package:mobile/models/temperature.dart';
 import 'package:mobile/utils/secure_storage.dart';
 
-
+/// Provides remote access to measurement-related API endpoints.
+///
+/// This provider communicate with the web server to retrieve, create, update or delete
+/// climate measures.
 class MeasureProvider {
 
   final apiUrl = dotenv.env['BASE_API_URL'];
@@ -29,6 +31,9 @@ class MeasureProvider {
   
   MeasureProvider(this.storage, this.client);
 
+  /// Send a multipart request containing the measure data and its associated picture (optional)
+  ///
+  /// Returns the HTTP Response received by the web server
   Future<http.Response> sendMultipart(String endpoint, Map<String, dynamic> jsonObject, File? picture) async {
 
     final request = http.MultipartRequest('POST', Uri.parse('$apiUrl/measures/$endpoint'));
@@ -40,23 +45,23 @@ class MeasureProvider {
         await http.MultipartFile.fromPath('picture', picture.path)
       );
     }
-    final response = await request.send();
+    final response = await client.send(request);
     return http.Response.fromStream(response);
-
   }
-  
+
+  /// Retrieves all measure submitted by the connected user
+  ///
+  /// Returns a list with all retrieved measure as [Measure] with their global data
+  /// Throws [Exception] if no user is connected or if the backend request fails
   Future<List<Measure>> getUserMeasures() async {
     final String? userId = await storage.getUserId();
     if (userId == null) {
       throw Exception('No user connected');
     }
     
-    final response = await http.get(Uri.parse('$apiUrl/measures/user/$userId'));
-    print('response code :  ${response.statusCode}');
-    print(response.body);
+    final response = await client.get(Uri.parse('$apiUrl/measures/user/$userId'));
 
     if (response.statusCode == 200) {
-      //return json.decode(response.body).map((m) => Measure.fromJson(m)).toList();
       final List<dynamic> decoded = jsonDecode(response.body);
       return decoded
           .map((m) => Measure.fromJson(m as Map<String, dynamic>))
@@ -66,11 +71,14 @@ class MeasureProvider {
     }
   }
 
+  /// Retrieves a single measure in its specific type
+  ///
+  /// Returns the retrieved measure as its specific type
+  ///
+  /// Throws an [Exception] if no user is connected or if the backend request fails
   Future getSingleMeasure(int id) async {
 
-    final response = await http.get(Uri.parse('$apiUrl/measures/$id'));
-    print('response code :  ${response.statusCode}');
-    print(response.body);
+    final response = await client.get(Uri.parse('$apiUrl/measures/$id'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> body = jsonDecode(response.body) as Map<String, dynamic>;
@@ -91,6 +99,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a temperature measure with an optional picture.
+  ///
+  /// Returns the newly created [Temperature].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<Temperature> createTemperature(DateTime date, String location, int degree, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -118,6 +130,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a snow height measure with an optional picture.
+  ///
+  /// Returns the newly created [SnowHeight].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<SnowHeight> createSnowHeight(DateTime date, String location, int height, WeatherType weather, int precipitation, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -147,6 +163,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a bird migration measure with an optional picture.
+  ///
+  /// Returns the newly created [BirdMigration].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<BirdMigration> createBirdMigration(DateTime date, String location, BirdSpecie specie, BirdEventType event, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -175,6 +195,10 @@ class MeasureProvider {
     }
   }
 
+  /// Creates a eggs laying measure with an optional picture.
+  ///
+  /// Returns the newly created [EggsLaying].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<EggsLaying> createEggsLaying(DateTime date, String location, int number, File? picture) async {
     try {
       final String? userId = await storage.getUserId();
@@ -202,6 +226,10 @@ class MeasureProvider {
     }
   }
 
+  /// Update a temperature measure.
+  ///
+  /// Returns the updated [Temperature].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<Temperature> updateTemperature(int measureId, DateTime date, String location, int degree) async {
     try {
       final String? userId = await storage.getUserId();
@@ -209,7 +237,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/temperature/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -220,8 +248,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
 
       if (response.statusCode == 200) {
         final temperature = Temperature.fromJson(
@@ -231,11 +257,14 @@ class MeasureProvider {
         throw Exception('Failed to update Temperature measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
 
+  /// Update a snow height measure.
+  ///
+  /// Returns the updated [SnowHeight].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<SnowHeight> updateSnowHeight(int measureId, DateTime date, String location, int height, WeatherType weather, int precipitation) async {
     try {
       final String? userId = await storage.getUserId();
@@ -243,7 +272,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/snow-height/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -256,9 +285,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
-
       if (response.statusCode == 200) {
         final snowHeight = SnowHeight.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -267,11 +293,14 @@ class MeasureProvider {
         throw Exception('Failed to update SnowHeight measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
 
+  /// Update a bird migration measure.
+  ///
+  /// Returns the updated [BirdMigration].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<BirdMigration> updateBirdMigration(int measureId, DateTime date, String location, BirdSpecie specie, BirdEventType event) async {
     try {
       final String? userId = await storage.getUserId();
@@ -279,7 +308,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/bird-migration/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -291,9 +320,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
-
       if (response.statusCode == 200) {
         final birdMigration = BirdMigration.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -302,11 +328,14 @@ class MeasureProvider {
         throw Exception('Failed to update BirdMigration measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
 
+  /// Update a eggs laying measure.
+  ///
+  /// Returns the updated [EggsLaying].
+  /// Throws an [Exception] if no user is connected or if the creation fails.
   Future<EggsLaying> updateEggsLaying(int measureId, DateTime date, String location, int number) async {
     try {
       final String? userId = await storage.getUserId();
@@ -314,7 +343,7 @@ class MeasureProvider {
         throw Exception('No user connected');
       }
 
-      final response = await http.put(
+      final response = await client.put(
           Uri.parse('$apiUrl/measures/eggs-laying/$measureId'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(<String, dynamic>{
@@ -325,9 +354,6 @@ class MeasureProvider {
           })
       ).timeout(Duration(seconds: 10));
 
-      print('response code : ${response.statusCode}');
-      print(response);
-
       if (response.statusCode == 200) {
         final eggsLaying = EggsLaying.fromJson(
             jsonDecode(response.body) as Map<String, dynamic>);
@@ -336,25 +362,23 @@ class MeasureProvider {
         throw Exception('Failed to update EggsLaying measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
 
+  /// Delete a measure.
+  ///
+  /// Throws an [Exception] if the delete fails.
   Future<void> deleteMeasure(int measureId) async {
     try {
-      final response = await http.delete(
+      final response = await client.delete(
           Uri.parse('$apiUrl/measures/$measureId')
       ).timeout(Duration(seconds: 10));
-
-      print('response code : ${response.statusCode}');
-      print(response);
 
       if (response.statusCode != 204) {
         throw Exception('Failed to delete Temperature measure');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

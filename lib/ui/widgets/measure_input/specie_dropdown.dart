@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app_theme.dart';
 import '../../../models/enum/bird_specie.dart';
 
+/// Display the dropdown selection for the specie value for a bird migration measure creation or update.
 class SpecieDropdown extends StatelessWidget {
   final BirdSpecie selected;
   final ValueChanged<BirdSpecie?> onChanged;

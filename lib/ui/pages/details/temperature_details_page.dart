@@ -5,12 +5,16 @@ import 'package:mobile/bloc/measure_bloc.dart';
 import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/models/temperature.dart';
 import 'package:mobile/ui/widgets/measure_input/measure_date_field.dart';
+import 'package:mobile/ui/widgets/measure_picture.dart';
 
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/measure_input/measure_text_field.dart';
 
+/// Display the temperature measure details page.
+///
+/// It contains all the value of a temperature measure and the possibility to update or delete it.
 class TemperatureDetailsPage extends StatefulWidget {
   final Temperature measure;
   const TemperatureDetailsPage({
@@ -100,6 +104,10 @@ class _TemperatureDetailsPageState extends State<TemperatureDetailsPage> {
                     MeasureDateField(label: "Date", controller: _dateController, onTap: _pickDate,),
                     MeasureTextField(label: "Lieu", controller: _locationController,),
                     MeasureTextField(label: "Degré", controller: _degreeController, keyboardType: TextInputType.number,),
+
+                    const SizedBox(height: 24),
+
+                    MeasurePicture(measureId: widget.measure.id),
 
                     const SizedBox(height: 24),
 

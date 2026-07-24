@@ -1,15 +1,18 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+/// Helper class providing the image picker for measure creation and update.
 class ImagePickerHelper {
 
   ImagePickerHelper._(); // private constructor since its a helper class
 
   static final ImagePicker _picker = ImagePicker();
 
+  /// Open the image picker on the user device
+  ///
+  /// Returns the selected image as a [File] or null if the operation is cancelled
   static Future<File?> showPicker(BuildContext context) async {
     final source = await showModalBottomSheet<ImageSource>(
         context: context,

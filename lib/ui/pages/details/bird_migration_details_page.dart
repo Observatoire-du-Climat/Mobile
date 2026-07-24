@@ -14,7 +14,11 @@ import 'package:mobile/ui/widgets/measure_input/specie_dropdown.dart';
 import '../../../app_theme.dart';
 import '../../../utils/date_picker_helper.dart';
 import '../../widgets/measure_action_button.dart';
+import '../../widgets/measure_picture.dart';
 
+/// Display the bird migration measure details page.
+///
+/// It contains all the value of a bird migration measure and the possibility to update or delete it.
 class BirdMigrationDetailsPage extends StatefulWidget {
   final BirdMigration measure;
   const BirdMigrationDetailsPage({
@@ -119,7 +123,13 @@ class _BirdMigrationDetailsPageState extends State<BirdMigrationDetailsPage> {
                             _eventType = value;
                           });
                         }),
+
                     const SizedBox(height: 24),
+
+                    MeasurePicture(measureId: widget.measure.id),
+
+                    const SizedBox(height: 24),
+
                     Column(
                       children: [
                         MeasureActionButton(

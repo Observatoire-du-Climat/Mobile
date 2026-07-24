@@ -3,11 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/bloc/measure_bloc.dart';
 import 'package:mobile/bloc/measure_event.dart';
 import 'package:mobile/bloc/measure_state.dart';
+import 'package:mobile/ui/widgets/alone_center_text.dart';
 
 import '../../app_theme.dart';
 import '../widgets/history_card.dart';
 import '../widgets/nav_bar.dart';
 
+/// Displays the measure history page of the connected user.
+///
+/// It contains a [HistoryCard] for each measure the user has submitted.
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
 
@@ -76,10 +80,14 @@ class _HistoryPageState extends State<HistoryPage> {
                           child: Builder(
                             builder: (context) {
                               if (state is MeasuresLoading) {
-                                return const Center(child: Text("Chargement..."));
+                                return const Center(
+                                  child: AloneCenterText(label: 'Chargement...'),
+                                );
                               }
                               if (state is MeasuresFetchedEmpty) {
-                                return const Center(child: Text("Aucune mesure"));
+                                return const Center(
+                                  child: AloneCenterText(label: 'Aucune mesure'),
+                                );
                               }
                               if (state is MeasuresFetched) {
                                 return ListView.separated(
@@ -92,7 +100,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                 );
                               }
                               return Center(
-                                child: Text('Etat : ${state.runtimeType}'),
+                                child: AloneCenterText(label: 'Veuillez recharger la page'),
                               );
                             },
                           ),

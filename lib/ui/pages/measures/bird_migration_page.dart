@@ -20,6 +20,9 @@ import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 
+/// Display the bird migration measure page creation.
+///
+/// It contains form containing all the bird migration details to submit and information about this measure type.
 class BirdMigrationPage extends StatefulWidget {
   const BirdMigrationPage({super.key});
 

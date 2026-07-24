@@ -18,7 +18,9 @@ import '../../widgets/nav_bar.dart';
 import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 
-
+/// Display the snow height measure page creation.
+///
+/// It contains form containing all the snow height details to submit and information about this measure type.
 class SnowHeightPage extends StatefulWidget {
   const SnowHeightPage({super.key});
 
@@ -161,7 +163,7 @@ class _SnowHeightPageState extends State<SnowHeightPage> {
                                     });
                                   },
                                 ),
-                                MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController, keyboardType: TextInputType.number,),
+                                MeasureTextField(label: "Précipitations neigeuses", controller: _precipitationController, keyboardType: TextInputType.number, titleWidth: 130,),
 
                                 const SizedBox(height: 24),
 

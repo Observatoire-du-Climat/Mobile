@@ -8,6 +8,9 @@ import 'package:mobile/ui/widgets/user_input.dart';
 import '../../app_theme.dart';
 import '../widgets/large_action_button.dart';
 
+/// Display the register page of the application.
+///
+/// It contains a form that ask for the user name, email and password.
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
@@ -36,11 +39,9 @@ class _RegisterPageState extends State<RegisterPage> {
       listener: (context, state) {
 
         if (state is UserConnected) {
-          print("Utilisateur connecté");
           Navigator.pushReplacementNamed(context, '/measure');
         }
         if (state is UserError) {
-          print("Erreur de creation");
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
         }
 

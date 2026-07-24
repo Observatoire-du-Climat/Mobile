@@ -8,6 +8,7 @@ import 'package:mobile/ui/widgets/large_action_button.dart';
 import '../../app_theme.dart';
 import '../widgets/nav_bar.dart';
 
+/// Display the profile page of the currently connected user.
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -124,6 +125,8 @@ class ProfileCard extends StatelessWidget {
             isValid ? "Compte validé" : "Compte non validé",
             style: Theme.of(context).textTheme.bodyMedium,
           ),
+          if (!isValid) const SizedBox(height: 15,),
+          if (!isValid) Text("Renseignez-vous auprès du Parc pour une formation!", style: Theme.of(context).textTheme.bodyMedium,),
           const SizedBox(height: 20),
           LargeActionButton(
             title: "Modifier",

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../app_theme.dart';
 
+/// Display specific information on the measure creation page.
 class InfoTextSection extends StatelessWidget {
   final String title;
   final String paragraph;

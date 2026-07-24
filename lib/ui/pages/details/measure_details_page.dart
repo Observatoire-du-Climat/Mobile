@@ -10,6 +10,10 @@ import 'package:mobile/ui/pages/details/snow_height_details_page.dart';
 import 'package:mobile/ui/pages/details/temperature_details_page.dart';
 import 'package:mobile/ui/widgets/nav_bar.dart';
 
+/// Display a "base" page for all type of measure to display their details.
+///
+/// It handles the retrieval and the error of those details.
+/// If successful, it is redirected to the correct measure type details page.
 class MeasureDetailsPage extends StatefulWidget {
   const MeasureDetailsPage({
     super.key,
@@ -58,7 +62,7 @@ class _MeasureDetailsPageState extends State<MeasureDetailsPage> {
 
                       if (state is MeasureDetailsError) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Error")),
+                          const SnackBar(content: Text('Erreur de récupération de la mesure')),
                         );
                       }
 

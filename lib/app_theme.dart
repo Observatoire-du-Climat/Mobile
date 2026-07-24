@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Defines the main colors used by the application.
 class AppColors {
   static const white = Color(0xFFFFFFFF);
   static const forestGreen = Color(0xFF224433);
@@ -7,6 +8,7 @@ class AppColors {
   static const greyBorder = Color(0xFF696969);
 }
 
+/// Defines the visual themes used by the application.
 class AppTheme {
   static ThemeData get lightTheme{
     return ThemeData(
@@ -33,7 +35,7 @@ class AppTheme {
           color : AppColors.forestGreen
         ),
         bodyMedium: TextStyle(
-          fontSize: 14,
+          fontSize: 18,
           color: Colors.black
         )
       )

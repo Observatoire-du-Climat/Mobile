@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../app_theme.dart';
 import '../../../models/enum/weather_type.dart';
 
+/// Display the dropdown selection for the weather value for a snow height measure creation or update.
 class WeatherDropdown extends StatelessWidget {
   final WeatherType selected;
   final ValueChanged<WeatherType?> onChanged;

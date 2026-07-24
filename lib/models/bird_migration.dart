@@ -4,6 +4,9 @@ import 'package:mobile/models/measure.dart';
 
 import 'enum/measure_type.dart';
 
+/// Represents a BirdMigration measure
+///
+/// It is a subclass of [Measure]. It contains the additionary values of a bird migration measurement.
 class BirdMigration extends Measure {
   final BirdSpecie specie;
   final BirdEventType event;
@@ -17,6 +20,9 @@ class BirdMigration extends Measure {
     required this.event
   });
 
+  /// Create a [BirdMigration] from a JSON object
+  ///
+  /// Throws a [FormatException] if the JSON object does not contain all the expected values
   factory BirdMigration.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {'id' : int id,

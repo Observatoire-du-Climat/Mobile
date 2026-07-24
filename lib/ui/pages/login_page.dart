@@ -8,6 +8,9 @@ import 'package:mobile/ui/widgets/user_input.dart';
 import '../../app_theme.dart';
 import '../widgets/large_action_button.dart';
 
+/// Display the login page of the application.
+///
+/// It contains a form that ask for the user email and password.
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -34,11 +37,9 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<UserBloc, UserState>(
         listener: (context, state) {
           if (state is UserConnected) {
-            print("Utilisateur connecté");
             Navigator.pushReplacementNamed(context, '/measure');
           }
           if (state is UserError) {
-            print("Erreur de connexion");
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     SafeArea(
-                      child: Padding(
+                      child: SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(horizontal: 31),
                         child: Column(
                           children: [

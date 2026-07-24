@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../app_theme.dart';
 
+/// Display the home page of the application.
+///
+/// It contains a path to register or log in.
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 

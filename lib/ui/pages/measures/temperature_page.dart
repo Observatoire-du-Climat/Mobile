@@ -16,6 +16,9 @@ import '../../widgets/measure_action_button.dart';
 import '../../widgets/info_text_section.dart';
 import '../../widgets/measure_input/measure_text_field.dart';
 
+/// Display the temperature measure page creation.
+///
+/// It contains form containing all the temperature details to submit and information about this measure type.
 class TemperaturePage extends StatefulWidget {
   const TemperaturePage({super.key});
 

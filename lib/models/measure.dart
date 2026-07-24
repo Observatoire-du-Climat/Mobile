@@ -1,5 +1,8 @@
 import 'package:mobile/models/enum/measure_type.dart';
 
+/// Represent the superclass of a climate measure
+///
+/// It contains all the global data shared by all measure types.
 class Measure {
   final int id;
   final DateTime date;
@@ -13,6 +16,9 @@ class Measure {
     required this.type
   });
 
+  /// Create a [Measure] from a JSON object
+  ///
+  /// Throws a [FormatException] if the JSON object does not contain all the expected values
   factory Measure.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {'id' : int id, 'date' : String date, 'location' : String location, 'type' : String type} => Measure(
